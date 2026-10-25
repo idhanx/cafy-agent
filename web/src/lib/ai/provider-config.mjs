@@ -16,7 +16,7 @@ const FILE = ["config", "ai-provider.json"];
 
 /** The secret that protects a stored key, or "" when the server has none. */
 export function serverSecret(env = process.env) {
-  return (env.CAFY_SECRET || env.AUTH_SECRET || env.CAFY_APP_PASSWORD || "").trim();
+  return (env.CAFY_SECRET || env.AUTH_SECRET || env.CAFY_APP_PASSWORD || env.BLOB_READ_WRITE_TOKEN || "").trim();
 }
 
 export function configPath(dataRoot) {

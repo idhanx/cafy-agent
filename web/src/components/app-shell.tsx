@@ -19,7 +19,7 @@ import { BetaBanner } from "@/components/beta/beta-banner";
 import { WorkerPills } from "@/components/jobs/worker-pills";
 import { visibleNavItems, isActivePath } from "@/lib/nav-items";
 
-export function AppShell({ children, followupsEnabled, hosted = false }: { children: React.ReactNode; followupsEnabled: boolean; hosted?: boolean }) {
+export function AppShell({ children, followupsEnabled, hosted = false, signOut = false }: { children: React.ReactNode; followupsEnabled: boolean; hosted?: boolean; signOut?: boolean }) {
   const pathname = usePathname();
   // Pick (and remember) the AI engine when there is exactly one — e.g. a deployment whose
   // operator set the provider key — so every AI surface works without a visit to Settings.
@@ -66,7 +66,7 @@ export function AppShell({ children, followupsEnabled, hosted = false }: { child
             <WorkerPills />
           </div>
           <div className="mt-auto" />
-          {hosted && (
+          {signOut && (
             <form method="post" action="/api/auth/logout" className="px-1">
               <button type="submit" className="text-xs text-muted hover:text-foreground hover:underline">Sign out</button>
             </form>

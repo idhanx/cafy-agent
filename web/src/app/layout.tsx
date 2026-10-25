@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { RouteProgressHost } from "@/components/route-progress-host";
 import { ThemeProvider } from "@/components/theme-provider";
 import { isHosted } from "@/lib/hosted.mjs";
+import { passwordFrom } from "@/lib/auth.mjs";
 import { ensureHostedFresh } from "@/lib/hosted-runtime";
 import { readFollowupsEnabled } from "@/lib/followups-server";
 import "./globals.css";
@@ -45,7 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <RouteProgressHost />
         <ThemeProvider>
-          <AppShell followupsEnabled={followupsEnabled} hosted={isHosted()}>{children}</AppShell>
+          <AppShell followupsEnabled={followupsEnabled} hosted={isHosted()} signOut={isHosted() && Boolean(passwordFrom())}>{children}</AppShell>
         </ThemeProvider>
       </body>
     </html>

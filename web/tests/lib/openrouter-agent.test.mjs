@@ -164,3 +164,11 @@ test("saved key is encrypted at rest and env wins over it", () => {
 test("a hosted server will not store a key in clear", () => {
   assert.throws(() => saveAiConfig(tmp(), { apiKey: "sk-x" }, { env: {}, hosted: true }), /AUTH_SECRET/);
 });
+
+test("on a hosted site with no AUTH_SECRET, the Blob token protects a saved key", () => {
+  const root = tmp();
+  const env = { BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_abc_123" };
+  saveAiConfig(root, { apiKey: "sk-or-v1-zzzzzzzzzz1234" }, { env, hosted: true });
+  assert.ok(!fs.readFileSync(path.join(root, "config", "ai-provider.json"), "utf8").includes("zzzzzzzzzz"));
+  assert.equal(resolveAiConfig(root, env).apiKey, "sk-or-v1-zzzzzzzzzz1234");
+});

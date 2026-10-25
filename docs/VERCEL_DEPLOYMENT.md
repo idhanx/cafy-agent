@@ -1,7 +1,7 @@
 # Deploying Cafy Agent on Vercel
 
-One deployment serves **one client**: a private, password-protected copy with its own
-storage. The client only has to connect an AI provider (an OpenRouter API key).
+One deployment serves **one client**: a copy with its own storage. There is no sign-in unless you add one
+(see step 4). The client only has to connect an AI provider (an OpenRouter API key).
 
 ## What you need
 
@@ -18,10 +18,10 @@ storage. The client only has to connect an AI provider (an OpenRouter API key).
    Keep **"Include source files outside of the Root Directory"** switched **on** (the app runs
    the engine scripts that live one folder up).
 3. **Storage → Create → Blob → _Private_**, connect it to the project. This adds `BLOB_READ_WRITE_TOKEN`.
-4. **Settings → Environment Variables**, add (see `web/.env.example`):
-   - `CAFY_APP_PASSWORD` — the password you give the client
-   - `AUTH_SECRET` — a long random string (`openssl rand -base64 32`)
-   - optional: `OPENROUTER_API_KEY` (otherwise the client pastes theirs in Settings)
+4. Nothing else is required. Optional environment variables (see `web/.env.example`):
+   - `OPENROUTER_API_KEY` — otherwise the client pastes theirs in Settings.
+   - `CAFY_APP_PASSWORD` + `AUTH_SECRET` — turns on a sign-in page. **Without them anyone who has the
+     link can open the site, spend the AI credit and see the data**, so keep the link private.
 5. Deploy. The function region is London (`lhr1`) via `web/vercel.json`; create the Blob store in a
    nearby region too.
 
@@ -34,7 +34,7 @@ terminal dashboard in `dashboard/`. The CLI, run from the root, mistakes it for 
 
 Open the deployment URL and go through this list:
 
-1. You land on the **sign-in** page; a wrong password is refused; the right one gets you in.
+1. The site opens straight away (or shows the sign-in page, if you set a password).
 2. No amber banner at the top. If one appears it names what is missing (storage, AI provider, engine files).
 3. **Settings → Connect an AI key** → paste the key → "Connected". Pick a model if you want a different one.
 4. **Résumé** → add a CV. Reload the page, then open the site in a private window and sign in again: the CV is still there.

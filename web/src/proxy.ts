@@ -28,13 +28,8 @@ const PUBLIC_PATHS = ["/login", "/api/auth/login", "/api/auth/logout", "/cafy-lo
 function hostedGate(req: NextRequest): NextResponse | null {
   const { pathname } = req.nextUrl;
   const isApi = pathname.startsWith("/api/");
-  // Fail closed: a deployment with no password would otherwise be open to the internet.
-  if (!passwordFrom()) {
-    const msg = "This deployment is not configured yet: set CAFY_APP_PASSWORD (and AUTH_SECRET) in the project's environment variables.";
-    return isApi
-      ? NextResponse.json({ error: msg }, { status: 503 })
-      : new NextResponse(msg, { status: 503, headers: { "content-type": "text/plain; charset=utf-8" } });
-  }
+  // Sign-in is optional: with no CAFY_APP_PASSWORD the site is open to whoever has the link.
+  if (!passwordFrom()) return null;
   if (PUBLIC_PATHS.includes(pathname)) return null;
   if (verifySession(req.cookies.get(SESSION_COOKIE)?.value)) return null;
   if (isApi) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
