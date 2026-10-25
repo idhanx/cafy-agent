@@ -48,6 +48,13 @@ export function proxy(req: NextRequest) {
   const hosted = isHosted();
   const decision = checkRequest({
     trustHost: hosted,
+    // Hosted only: opening a PAGE from another site (a link, the Vercel dashboard) must work.
+    allowCrossSiteNavigation:
+      hosted &&
+      req.method === "GET" &&
+      req.headers.get("sec-fetch-mode") === "navigate" &&
+      req.headers.get("sec-fetch-dest") === "document" &&
+      !req.nextUrl.pathname.startsWith("/api/"),
     secFetchSite: req.headers.get("sec-fetch-site"),
     origin: req.headers.get("origin"),
     host: req.headers.get("host"),

@@ -52,3 +52,10 @@ test("hosted mode is detected from Vercel and can be forced either way", () => {
   assert.ok(!isHosted({}));
   assert.ok(!isHosted({ VERCEL: "1", CAFY_HOSTED: "0" }));
 });
+
+test("hosted: a page opened from another site is allowed, but cross-site requests that act are not", () => {
+  const base = { origin: null, host: "app.vercel.app", secFetchSite: "cross-site", allowedHosts: new Set(), allowedOrigins: new Set(), trustHost: true };
+  assert.equal(checkRequest({ ...base, allowCrossSiteNavigation: true }).ok, true);
+  assert.equal(checkRequest({ ...base }).ok, false, "the proxy only sets the flag for GET page navigations");
+  assert.equal(checkRequest({ ...base, secFetchSite: "same-site", allowCrossSiteNavigation: false }).ok, false);
+});
