@@ -33,8 +33,8 @@ const NEVER_SHIP = [
   "../cv.md", "../cv.md.bak*", "../portals.yml", "../article-digest.md", "../voice-dna.md", "../config/profile.yml", "../config/cv-facts.json", "../.env*",
   "../tests/**", "../test-fixtures/**", "../docs/**", "../examples/**", "../dashboard/**", "../web/tests/**", "../web/docs/**",
   "./.next-*/**", "./.next/cache/**", "./.next/dev/**", "**/*.map",
-  "./node_modules/typescript/**", "./node_modules/@typescript/**", "./node_modules/@img/**", "./node_modules/sharp/**",
-  "./node_modules/@swc/**", "./node_modules/@next/swc-*/**", "./node_modules/@tailwindcss/**", "./node_modules/tailwindcss/**", "./node_modules/lightningcss*/**",
+  // Build-time only. (Next itself needs @swc/helpers at runtime — never exclude it.)
+  "./node_modules/typescript/**", "./node_modules/@typescript/**", "./node_modules/@next/swc-*/**",
 ];
 
 /** @type {import('next').NextConfig} */
