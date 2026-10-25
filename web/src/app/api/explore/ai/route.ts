@@ -12,6 +12,7 @@ import { fencingReport } from "@/lib/cli-fencing.mjs";
 import { codexFencingSupported } from "@/lib/cli-fencing-probe.mjs";
 import { readJsonObject } from "@/lib/json-body";
 import { hostedSync } from "@/lib/hosted-route";
+import { isHosted } from "@/lib/hosted.mjs";
 
 // Deny list DERIVED, never hand-written: every one of the six advisor argvs
 // that spelled its own omitted MultiEdit, which --permission-mode acceptEdits
@@ -30,7 +31,7 @@ const CODEX_OUTPUT_FLAG = "--output-last-message";
 // cannot persist; the only writes happen when the user later ADDs a candidate.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 600;
+export const maxDuration = 300;
 
 const OUTPUT_CONTRACT = `
 
@@ -262,7 +263,7 @@ async function POST_handler(req: Request) {
       let codexStderr = "";
       killer = setTimeout(() => {
         terminateChild();
-      }, 480_000);
+      }, isHosted() ? 270_000 : 480_000);
       const safeClose = () => {
         if (!closed) {
           closed = true;

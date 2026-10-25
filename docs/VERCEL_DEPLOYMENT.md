@@ -7,7 +7,7 @@ storage. The client only has to connect an AI provider (an OpenRouter API key).
 
 | | |
 |---|---|
-| Vercel plan | **Pro** (or higher). Several routes run for up to 5–13 minutes (`maxDuration` 300–800 s), which Hobby does not allow. |
+| Vercel plan | Hobby works; **Pro** is smoother. Every route is capped at 300 s, so one AI action (evaluate, tailor a CV) stops after about 4.5 minutes. |
 | Blob store | A **private** Vercel Blob store (holds the client's CV, tracker, reports). |
 | AI key | An OpenRouter key — set by you, or pasted by the client in *Settings → AI provider*. |
 

@@ -438,7 +438,10 @@ export function newCompletedReportNum(beforeEntries, afterEntries) {
 // searches routinely run longer — and the kill then misreported as "didn't save
 // a report" (#3124).
 export const RUN_MAX_DURATION_S = 800;
-export function killMsForKind(kind) {
+export function killMsForKind(kind, hosted = false) {
+  // A hosted function may run 300s at most (Vercel's cap on every plan that allows
+  // it): the agent gets what is left after the render that follows a pdf run.
+  if (hosted) return kind === "pdf" ? 180_000 : 270_000;
   if (kind === "pdf") return 600_000;
   if (kind === "evaluate") return 740_000;
   return 780_000;

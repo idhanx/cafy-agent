@@ -26,11 +26,12 @@ import { acquireTrackerWrite, releaseTrackerWrite } from "@/lib/core/run-registr
 import { createRunFinalizer } from "@/lib/run-finalizer.mjs";
 import { readJsonObject } from "@/lib/json-body";
 import { hostedSync } from "@/lib/hosted-route";
+import { isHosted } from "@/lib/hosted.mjs";
 import { prepareHostedChromium } from "@/lib/hosted-runtime";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 800; // a real oferta evaluation / pdf-mode CV tailoring + render is heavy and multi-step
+export const maxDuration = 300; // a real oferta evaluation / pdf-mode CV tailoring + render is heavy and multi-step
 
 async function POST_handler(req: Request) {
   const body = await readJsonObject<{ kind?: string; input?: string; cliId?: string; brief?: unknown }>(req);
@@ -279,7 +280,7 @@ async function POST_handler(req: Request) {
       // routinely run past it — and the SIGTERM then surfaced as "didn't save a
       // report" (see the close handler), blaming the CLI for a limit we imposed
       // (#3124). 780s leaves ~20s under maxDuration for a graceful shutdown.
-      const killMs = killMsForKind(kind);
+      const killMs = killMsForKind(kind, isHosted());
       // Set by the killer so the close handler can tell "we timed it out" apart
       // from "the CLI exited on its own" — different failures, different message.
       let killedByTimeout = false;
