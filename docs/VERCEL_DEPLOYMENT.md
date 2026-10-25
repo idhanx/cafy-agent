@@ -25,7 +25,10 @@ storage. The client only has to connect an AI provider (an OpenRouter API key).
 5. Deploy. The function region is London (`lhr1`) via `web/vercel.json`; create the Blob store in a
    nearby region too.
 
-Deploying with the CLI instead? Run it from the repository root; `.vercelignore` keeps personal files out.
+**Deploy from the Vercel dashboard (Git import), not with `vercel` from the repository root.** The repo also holds a Go
+terminal dashboard in `dashboard/`. The CLI, run from the root, mistakes it for a separate "service" and stops with
+`MISSING_SERVICE_CONFIG … Service "dashboard" must specify an "entrypoint" for runtime "go"`. With Root Directory set to
+`web` (step 2) Vercel never looks at that folder.
 
 ## Check it before the client does
 

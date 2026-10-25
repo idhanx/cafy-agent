@@ -11,7 +11,7 @@
     "test": "node --experimental-strip-types --test \"tests/**/*.test.mjs\""
   },
   "engines": {
-    "node": ">=22.6.0"
+    "node": "22.x"
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.80",
