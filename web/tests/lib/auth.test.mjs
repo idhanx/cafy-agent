@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createSession, verifySession, checkPassword, safeNext, tooManyMisses, recordMiss, clearMisses, SESSION_TTL_S } from "../../src/lib/auth.mjs";
+import { authEnabled, createSession, verifySession, checkPassword, safeNext, tooManyMisses, recordMiss, clearMisses, SESSION_TTL_S } from "../../src/lib/auth.mjs";
 import { checkRequest } from "../../src/lib/origin-guard.mjs";
 import { isHosted } from "../../src/lib/hosted.mjs";
 
@@ -58,4 +58,11 @@ test("hosted: a page opened from another site is allowed, but cross-site request
   assert.equal(checkRequest({ ...base, allowCrossSiteNavigation: true }).ok, true);
   assert.equal(checkRequest({ ...base }).ok, false, "the proxy only sets the flag for GET page navigations");
   assert.equal(checkRequest({ ...base, secFetchSite: "same-site", allowCrossSiteNavigation: false }).ok, false);
+});
+
+test("sign-in needs both the explicit switch and a password; a stray password alone locks nothing", () => {
+  assert.equal(authEnabled({ CAFY_APP_PASSWORD: "pw" }), false);
+  assert.equal(authEnabled({ CAFY_REQUIRE_SIGN_IN: "1" }), false);
+  assert.equal(authEnabled({ CAFY_REQUIRE_SIGN_IN: "1", CAFY_APP_PASSWORD: "pw" }), true);
+  assert.equal(authEnabled({}), false);
 });

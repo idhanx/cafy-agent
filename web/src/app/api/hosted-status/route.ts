@@ -3,7 +3,7 @@ import { careerOpsRoot } from "@/lib/career-ops";
 import { isHosted } from "@/lib/hosted.mjs";
 import { hasAiKey } from "@/lib/ai/provider-config.mjs";
 import { findEngineRoot, storageConfigured } from "@/lib/hosted-runtime";
-import { passwordFrom } from "@/lib/auth.mjs";
+import { authEnabled } from "@/lib/auth.mjs";
 import { hostedSync } from "@/lib/hosted-route";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +19,7 @@ async function GET_handler() {
     storage: !hosted || storageConfigured(),
     ai: hasAiKey(careerOpsRoot()),
     engine: !hosted || findEngineRoot() !== null,
-    password: !hosted || Boolean(passwordFrom()),
+    password: authEnabled(),
   });
 }
 

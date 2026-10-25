@@ -20,7 +20,7 @@ One deployment serves **one client**: a copy with its own storage. There is no s
 3. **Storage → Create → Blob → _Private_**, connect it to the project. This adds `BLOB_READ_WRITE_TOKEN`.
 4. Nothing else is required. Optional environment variables (see `web/.env.example`):
    - `OPENROUTER_API_KEY` — otherwise the client pastes theirs in Settings.
-   - `CAFY_APP_PASSWORD` + `AUTH_SECRET` — turns on a sign-in page. **Without them anyone who has the
+   - `CAFY_REQUIRE_SIGN_IN=1` + `CAFY_APP_PASSWORD` + `AUTH_SECRET` — turns on a sign-in page (a password alone does nothing). **Without them anyone who has the
      link can open the site, spend the AI credit and see the data**, so keep the link private.
 5. Deploy. The function region is London (`lhr1`) via `web/vercel.json`; create the Blob store in a
    nearby region too.

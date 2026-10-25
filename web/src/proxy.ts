@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { isHosted } from "@/lib/hosted.mjs";
-import { SESSION_COOKIE, passwordFrom, verifySession } from "@/lib/auth.mjs";
+import { SESSION_COOKIE, authEnabled, verifySession } from "@/lib/auth.mjs";
 import {
   checkRequest,
   parseAllowedHosts,
@@ -28,8 +28,8 @@ const PUBLIC_PATHS = ["/login", "/api/auth/login", "/api/auth/logout", "/cafy-lo
 function hostedGate(req: NextRequest): NextResponse | null {
   const { pathname } = req.nextUrl;
   const isApi = pathname.startsWith("/api/");
-  // Sign-in is optional: with no CAFY_APP_PASSWORD the site is open to whoever has the link.
-  if (!passwordFrom()) return null;
+  // Sign-in is opt-in (CAFY_REQUIRE_SIGN_IN=1 plus a password); otherwise the site is open to whoever has the link.
+  if (!authEnabled()) return null;
   if (PUBLIC_PATHS.includes(pathname)) return null;
   if (verifySession(req.cookies.get(SESSION_COOKIE)?.value)) return null;
   if (isApi) return NextResponse.json({ error: "Sign in required." }, { status: 401 });

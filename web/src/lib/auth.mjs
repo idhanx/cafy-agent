@@ -7,6 +7,15 @@ import crypto from "node:crypto";
 export const SESSION_COOKIE = "cafy_session";
 export const SESSION_TTL_S = 60 * 60 * 24 * 14;
 
+/**
+ * Is the sign-in page switched on? Only when the operator asks for it explicitly
+ * (CAFY_REQUIRE_SIGN_IN=1) AND has set a password — a password variable left over in a
+ * project's settings must never lock a site that was meant to be open.
+ */
+export function authEnabled(env = process.env) {
+  return env.CAFY_REQUIRE_SIGN_IN === "1" && Boolean(passwordFrom(env));
+}
+
 export function passwordFrom(env = process.env) {
   return (env.CAFY_APP_PASSWORD || "").trim();
 }
