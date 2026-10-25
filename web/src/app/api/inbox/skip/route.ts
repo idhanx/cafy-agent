@@ -4,6 +4,7 @@ import path from "node:path";
 import { careerOpsRoot } from "@/lib/career-ops";
 import { setInboxSkip } from "@/lib/inbox-skip.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,7 +27,7 @@ const ERROR_MSG: Record<string, string> = {
   "busy": "The pipeline is being written right now (CLI or another tab). Try again.",
 };
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ url?: unknown; done?: unknown }>(req);
   if (!body) return NextResponse.json({ error: "bad json" }, { status: 400 });
 
@@ -63,3 +64,5 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "write failed" }, { status: 500 });
   }
 }
+
+export const POST = hostedSync(POST_handler);

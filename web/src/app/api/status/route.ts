@@ -5,6 +5,7 @@ import { runSetStatus } from "@/lib/core-cli";
 import { canonicalizeStatus } from "@/lib/core/states";
 import { parseCliJson, trackerRowArg, clientErrorMessage } from "@/lib/status-cli.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs"; // delegates to the core CLI via child_process
 
@@ -50,7 +51,7 @@ const CLIENT_ERROR_CODES = new Set(["usage", "invalid-state"]);
 // of the document, and can contain a brace of its own — so status-cli.mjs reads
 // the document from the end rather than from the first `{`.
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ n?: string; status?: string }>(req);
   if (!body) return NextResponse.json({ error: "bad json" }, { status: 400 });
   const { n, status } = body;
@@ -166,3 +167,5 @@ export async function POST(req: Request) {
     statusLogged: parsed.statusLogged === true,
   });
 }
+
+export const POST = hostedSync(POST_handler);

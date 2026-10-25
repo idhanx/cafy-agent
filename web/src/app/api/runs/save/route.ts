@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { careerOpsRoot } from "@/lib/career-ops";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ type Body = {
 
 // Persist a finished worker's log as markdown under a web-managed dir so the CLI
 // assistant can read past runs ("what did we find on that Anthropic role?").
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const b = await readJsonObject<Body>(req);
   if (!b) return NextResponse.json({ error: "bad json" }, { status: 400 });
   const safeId = String(b.id ?? "").replace(/[^a-z0-9_-]/gi, "");
@@ -54,3 +55,5 @@ ${b.output || ""}
     return NextResponse.json({ error: "write failed" }, { status: 500 });
   }
 }
+
+export const POST = hostedSync(POST_handler);

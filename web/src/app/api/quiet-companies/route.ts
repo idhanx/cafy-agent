@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import fs from "node:fs";
 import { careerOpsRoot, rootScript } from "@/lib/career-ops";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,7 +17,7 @@ export const dynamic = "force-dynamic";
 //
 // No flags: rejection-latency.mjs prints JSON by default, like stats.mjs and
 // upskill.mjs. The argv is registered in tests/web-core-argv-contract.test.mjs.
-export async function GET() {
+async function GET_handler() {
   const script = rootScript("rejection-latency");
   if (!fs.existsSync(script)) return Response.json({ available: false, reason: "no-script", data: null });
 
@@ -34,3 +35,5 @@ export async function GET() {
     return Response.json({ available: false, reason: "unparseable", data: null });
   }
 }
+
+export const GET = hostedSync(GET_handler);

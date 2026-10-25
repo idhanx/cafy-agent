@@ -5,6 +5,9 @@ import { codexStreamArgs, isFatalClaudeStderr, isFatalCodexStderr, parseClaudeEv
 import { installedCliIds, pickUsableCli } from "./cli-pick.mjs";
 import { careerOpsRoot } from "./career-ops";
 import { readRememberedCli } from "./remembered-cli.mjs";
+import { BUILTIN_BIN } from "./ai/openrouter-agent.mjs";
+import { hasAiKey } from "./ai/provider-config.mjs";
+import { isHosted } from "./hosted.mjs";
 
 // Server-only (node imports). The agnostic runtimes career-ops can delegate to
 // in headless mode (AGENTS.md). Install URLs from career-ops-docs.
@@ -74,6 +77,10 @@ export const KNOWN: CliSpec[] = [
   // which displayed fine and recorded `tokens: 0` on every grok run.
   { id: "grok", name: "Grok Build CLI", bin: "grok", run: "grok -p", url: "https://docs.x.ai/build/overview", args: (p) => ["-p", p], streamArgs: (p) => ["-p", p, "--output-format", "streaming-json"], parseEvent: parseGrokEvent },
   { id: "hermes", name: "Hermes Agent", bin: "hermes", run: "hermes chat", url: "https://github.com/NousResearch/hermes-agent", args: (p) => ["chat", "-q", p, "--oneshot", "-Q", "--no-restore-cwd"] },
+  // Built in: needs only an OpenRouter API key, no installed program. Listed last so
+  // anyone who already runs a local CLI keeps it as their default; on a hosted
+  // deployment it is the only one that can exist.
+  { id: "openrouter", name: "Cafy AI (OpenRouter)", bin: BUILTIN_BIN, run: "OpenRouter API", url: "https://openrouter.ai/keys", args: (p) => ["-p", p] },
 ];
 
 function searchDirs(): string[] {
@@ -123,6 +130,10 @@ function binCandidates(bin: string): string[] {
 }
 
 export function findBin(bin: string, dirs = searchDirs()): string | null {
+  if (bin === BUILTIN_BIN) return hasAiKey(careerOpsRoot()) ? BUILTIN_BIN : null;
+  // A hosted deployment has no local CLIs to find, and probing the server's
+  // filesystem for them would only mislead the settings page.
+  if (isHosted()) return null;
   for (const dir of dirs) {
     for (const candidate of binCandidates(bin)) {
       const p = path.join(dir, candidate);

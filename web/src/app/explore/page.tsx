@@ -11,7 +11,10 @@ export const dynamic = "force-dynamic";
 export default function ExplorePage() {
   let seed: { filters: typeof DEFAULT_FILTERS; seededFrom: string[] } = { filters: DEFAULT_FILTERS, seededFrom: [] };
   try {
-    seed = seedExploreFilters();
+    // Personal seeding (portals.yml / profile.yml → roles, excludes, locations) is
+    // opt-in for local use. A deployed instance must start blank, never prefilled
+    // with the owner's targeting.
+    if (process.env.CAREER_OPS_SEED_EXPLORE === "1") seed = seedExploreFilters();
   } catch {
     /* bare checkout → defaults */
   }

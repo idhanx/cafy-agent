@@ -4,6 +4,7 @@ import path from "node:path";
 import { careerOpsRoot } from "@/lib/career-ops";
 import { atomicWriteWithBackup } from "@/lib/core/safe-write";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 function cvPath() {
   return path.join(careerOpsRoot(), "cv.md");
@@ -11,7 +12,7 @@ function cvPath() {
 
 const MAX_CV_BYTES = 200_000;
 
-export async function GET() {
+async function GET_handler() {
   try {
     return NextResponse.json({ content: fs.readFileSync(cvPath(), "utf8"), exists: true });
   } catch {
@@ -19,7 +20,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ content?: string }>(req);
   if (!body) return NextResponse.json({ error: "bad json" }, { status: 400 });
   if (typeof body.content !== "string") {
@@ -37,3 +38,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "write failed" }, { status: 500 });
   }
 }
+
+export const GET = hostedSync(GET_handler);
+export const POST = hostedSync(POST_handler);

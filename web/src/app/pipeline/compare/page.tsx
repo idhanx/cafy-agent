@@ -46,7 +46,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
 
   return (
     <PageFrame>
-      <Link href="/pipeline?tab=all" className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-brand">
+      <Link href="/pipeline?tab=all" className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-brand-text">
         <ArrowLeft className="size-4" /> Pipeline
       </Link>
       <h1 className="mt-5 font-display text-2xl tracking-tight text-landing">Compare</h1>
@@ -55,12 +55,12 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
       ) : (
         <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full min-w-[40rem] table-fixed text-sm">
-            <thead className="bg-surface/60 text-left align-top">
+            <thead className="bg-surface text-left align-top">
               <tr>
                 <th className="w-32 px-4 py-3" />
                 {columns.map((c) => (
                   <th key={c.n} scope="col" className="px-4 py-3 font-normal">
-                    <Link href={`/pipeline/${c.n}`} className="flex items-center gap-2 hover:text-brand">
+                    <Link href={`/pipeline/${c.n}`} className="flex items-center gap-2 hover:text-brand-text">
                       <CompanyLogo name={c.company} size={24} />
                       <span className="font-medium">{c.company}</span>
                     </Link>

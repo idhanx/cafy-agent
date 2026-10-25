@@ -55,7 +55,7 @@ export function FacetChips({
             value={kw}
             onChange={(e) => setKw(e.target.value)}
             placeholder="Filter by company or role…"
-            className="w-full rounded-lg border border-border bg-surface/60 py-2 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40 max-sm:min-h-[44px]"
+            className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40 max-sm:min-h-[44px]"
           />
         </div>
         <span className="shrink-0 text-xs text-muted">
@@ -67,7 +67,7 @@ export function FacetChips({
       {/* chip row — desktop wraps, mobile scrolls inside the container */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
         {/* freshness (single-select segmented; click active to clear) */}
-        <div className="inline-flex shrink-0 rounded-lg border border-border bg-surface/40 p-0.5">
+        <div className="inline-flex shrink-0 rounded-lg border border-border bg-surface p-0.5">
           {FRESHNESS_WINDOWS.map((w) => (
             <button
               key={w.days}
@@ -75,7 +75,7 @@ export function FacetChips({
               onClick={() => setWithin(within === w.days ? null : w.days)}
               className={cn(
                 "rounded-md px-2.5 py-1 text-xs font-medium transition-colors max-sm:min-h-[44px]",
-                within === w.days ? "bg-brand-soft text-brand" : "text-muted hover:text-foreground",
+                within === w.days ? "bg-brand-soft text-brand-text" : "text-muted hover:text-foreground",
               )}
             >
               {w.label}
@@ -100,7 +100,7 @@ export function FacetChips({
           value={locQ}
           onChange={(e) => setLocQ(e.target.value)}
           placeholder="location…"
-          className="w-28 shrink-0 rounded-full border border-border bg-surface/40 px-3 text-xs outline-none transition-colors placeholder:text-faint focus:border-brand/40 max-sm:min-h-[44px] py-1"
+          className="w-28 shrink-0 rounded-full border border-border bg-surface px-3 text-xs outline-none transition-colors placeholder:text-faint focus:border-brand/40 max-sm:min-h-[44px] py-1"
         />
 
         {anyActive && (
@@ -131,7 +131,7 @@ function Pill({ on, onClick, children }: { on: boolean; onClick: () => void; chi
       onClick={onClick}
       className={cn(
         "shrink-0 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors max-sm:min-h-[44px]",
-        on ? "border-brand/40 bg-brand-soft text-brand" : "border-border text-muted hover:text-foreground",
+        on ? "border-brand/40 bg-brand-soft text-brand-text" : "border-border text-muted hover:text-foreground",
       )}
     >
       {children}

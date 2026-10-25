@@ -4,12 +4,12 @@ import { coverageBand } from "@/lib/keyword-coverage.mjs";
 export function CoverageMeter({ coverage, dropped }: { coverage: { present: string[]; missing: string[]; pct: number | null }; dropped: string[] }) {
   const total = coverage.present.length + coverage.missing.length;
   if (!total) {
-    return <p className="rounded-2xl border border-border bg-surface/40 px-5 py-3 text-sm text-muted">This report has no extracted keywords, so coverage is not measured.</p>;
+    return <p className="rounded-2xl border border-border bg-surface px-5 py-3 text-sm text-muted">This report has no extracted keywords, so coverage is not measured.</p>;
   }
   const band = coverageBand(coverage.pct);
   const bar = { high: "bg-emerald-500", mid: "bg-amber-500", low: "bg-red-400", unknown: "bg-muted" }[band];
   return (
-    <section aria-label="Keyword coverage" className="rounded-2xl border border-border bg-surface/40 px-5 py-4">
+    <section aria-label="Keyword coverage" className="rounded-2xl border border-border bg-surface px-5 py-4">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-sm font-medium text-foreground">Job keyword coverage</h2>
         <p className="font-mono text-sm text-foreground" data-testid="coverage-count">

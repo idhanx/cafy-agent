@@ -10,6 +10,7 @@ import { buildAnswerPrompt } from "@/lib/apply/answer-prompt.mjs";
 import { runPlanner } from "@/lib/apply/planner";
 import { extractJsonObject } from "@/lib/extract-json-object.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ export const maxDuration = 320;
 // report. We stream a live diagnostic log of every step (spawn, heartbeats,
 // exit code/signal, parse outcome) so a stuck/empty prefill is observable on the
 // page AND written to <root>/.career-ops-web/apply-prefill.log for debugging.
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ sessionId?: string; cliId?: string; company?: string; application?: string }>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const { sessionId, cliId: requestedCliId, company, application } = body;
@@ -141,3 +142,5 @@ export async function POST(req: Request) {
 
   return new Response(stream, { headers: { "Content-Type": "application/x-ndjson", "Cache-Control": "no-store" } });
 }
+
+export const POST = hostedSync(POST_handler);

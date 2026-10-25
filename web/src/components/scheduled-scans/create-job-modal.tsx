@@ -54,7 +54,7 @@ export function CreateJobModal({
     <ScheduledOverlay isOpen={isOpen} onClose={onClose} titleId="create-scheduled-scan-title" initialFocusRef={nameRef} panelClassName="max-w-2xl">
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center gap-2.5">
-            <div className="grid size-9 place-items-center rounded-xl bg-brand-soft text-brand">
+            <div className="grid size-9 place-items-center rounded-xl bg-brand-soft text-brand-text">
               <CalendarPlus className="size-5" />
             </div>
             <div>
@@ -134,7 +134,7 @@ export function CreateJobModal({
           </div>
 
           {/* ─── Reuse FilterBuilder from Explore ─── */}
-          <div className="rounded-xl border border-border bg-surface/30 p-4">
+          <div className="rounded-xl border border-border bg-surface p-4">
             <FilterBuilder filters={filters} onChange={setFilters} />
           </div>
 
@@ -150,7 +150,7 @@ export function CreateJobModal({
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2 text-xs font-medium text-brand-foreground shadow transition-colors hover:bg-brand-200 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-inverse px-5 py-2 text-xs font-medium text-inverse-foreground shadow transition-colors hover:bg-inverse/80 disabled:opacity-50"
             >
               {submitting ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
               {submitting ? "Creating…" : "Save Scheduled Scan"}

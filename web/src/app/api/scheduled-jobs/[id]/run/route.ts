@@ -5,6 +5,8 @@ import { NextResponse } from "next/server";
 import { getScheduledJob } from "@/lib/scheduled-jobs";
 import { isSafeScheduledId } from "@/lib/scheduled-jobs-store.mjs";
 import { resolveCodeRoot } from "@/lib/core/code-root.mjs";
+import { hostedSync } from "@/lib/hosted-route";
+import { isHosted } from "@/lib/hosted.mjs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -68,7 +70,8 @@ function runJob(runner: string, id: string) {
   });
 }
 
-export async function POST(_req: Request, { params }: RouteContext) {
+async function POST_handler(_req: Request, { params }: RouteContext) {
+  if (isHosted()) return NextResponse.json({ error: "Scheduled scans are not available on the hosted version." }, { status: 501 });
   const { id } = await params;
   if (!isSafeScheduledId(id)) return NextResponse.json({ error: "Invalid scheduled job identifier." }, { status: 400 });
   let job;
@@ -102,3 +105,5 @@ export async function POST(_req: Request, { params }: RouteContext) {
     return NextResponse.json({ error: "Scheduled scan returned an invalid result." }, { status: 500 });
   }
 }
+
+export const POST = hostedSync(POST_handler);

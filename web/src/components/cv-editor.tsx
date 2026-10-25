@@ -66,7 +66,7 @@ export function CvEditor() {
           className={cn(
             "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-colors max-sm:min-h-[44px]",
             dirty
-              ? "bg-brand text-brand-foreground hover:bg-brand-200"
+              ? "bg-inverse text-inverse-foreground hover:bg-inverse/80"
               : "border border-border bg-surface text-muted",
           )}
         >
@@ -87,9 +87,9 @@ export function CvEditor() {
             }}
             spellCheck={false}
             placeholder="# Your Name&#10;&#10;## Summary&#10;..."
-            className="min-h-[60vh] w-full resize-none rounded-2xl border border-border bg-surface/50 p-4 font-mono text-sm leading-relaxed outline-none transition-colors placeholder:text-faint focus:border-brand/40"
+            className="min-h-[60vh] w-full resize-none rounded-2xl border border-border bg-surface p-4 font-mono text-sm leading-relaxed outline-none transition-colors placeholder:text-faint focus:border-brand/40"
           />
-          <article className="report-prose min-h-[60vh] overflow-auto rounded-2xl border border-border bg-surface/30 p-5">
+          <article className="report-prose min-h-[60vh] overflow-auto rounded-2xl border border-border bg-surface p-5">
             {content.trim() ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
             ) : (

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { isHosted } from "@/lib/hosted.mjs";
+import { SESSION_COOKIE, passwordFrom, verifySession } from "@/lib/auth.mjs";
 import {
   checkRequest,
   parseAllowedHosts,
@@ -20,8 +22,32 @@ import {
 // was. It is what a local companion client needs: a browser extension calls
 // from a chrome-extension:// origin, which Fetch Metadata always reports as
 // "cross-site", so every one of its requests is refused otherwise.
+// The sign-in screen and the brand images it shows must load before anyone has signed in.
+const PUBLIC_PATHS = ["/login", "/api/auth/login", "/api/auth/logout", "/cafy-logo.svg", "/icon.svg"];
+
+function hostedGate(req: NextRequest): NextResponse | null {
+  const { pathname } = req.nextUrl;
+  const isApi = pathname.startsWith("/api/");
+  // Fail closed: a deployment with no password would otherwise be open to the internet.
+  if (!passwordFrom()) {
+    const msg = "This deployment is not configured yet: set CAFY_APP_PASSWORD (and AUTH_SECRET) in the project's environment variables.";
+    return isApi
+      ? NextResponse.json({ error: msg }, { status: 503 })
+      : new NextResponse(msg, { status: 503, headers: { "content-type": "text/plain; charset=utf-8" } });
+  }
+  if (PUBLIC_PATHS.includes(pathname)) return null;
+  if (verifySession(req.cookies.get(SESSION_COOKIE)?.value)) return null;
+  if (isApi) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  const url = req.nextUrl.clone();
+  url.pathname = "/login";
+  url.search = `?next=${encodeURIComponent(pathname + req.nextUrl.search)}`;
+  return NextResponse.redirect(url);
+}
+
 export function proxy(req: NextRequest) {
+  const hosted = isHosted();
   const decision = checkRequest({
+    trustHost: hosted,
     secFetchSite: req.headers.get("sec-fetch-site"),
     origin: req.headers.get("origin"),
     host: req.headers.get("host"),
@@ -31,6 +57,7 @@ export function proxy(req: NextRequest) {
   if (!decision.ok) {
     return NextResponse.json({ error: decision.reason }, { status: decision.status });
   }
+  if (hosted) return hostedGate(req) ?? NextResponse.next();
   return NextResponse.next();
 }
 

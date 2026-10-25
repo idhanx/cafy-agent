@@ -61,7 +61,7 @@ export function DecisionCard({ app, reason }: { app: Application; reason?: CardR
   if (done) return null;
 
   return (
-    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-surface/40 p-3.5 transition hover:border-brand/30">
+    <div className="flex min-w-0 flex-col gap-2.5 rounded-xl border border-border bg-surface p-3.5 transition hover:border-brand/30">
       <div className="flex items-start gap-2.5">
         <CompanyLogo name={company.logoName} size={24} />
         <div className="min-w-0 flex-1">

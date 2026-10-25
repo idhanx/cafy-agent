@@ -2,6 +2,7 @@ import { execFile } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { careerOpsRoot, portalsConfigPath, rootScript } from "@/lib/career-ops";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,7 +19,7 @@ const STATUS: Record<string, "live" | "empty" | "broken" | "skipped"> = {
   "➖": "skipped",
 };
 
-export async function GET() {
+async function GET_handler() {
   const root = careerOpsRoot();
   const verifyPortals = rootScript("verify-portals");
   if (!fs.existsSync(verifyPortals)) {
@@ -78,3 +79,5 @@ export async function GET() {
   }
   return Response.json({ available: true, configured: true, companies });
 }
+
+export const GET = hostedSync(GET_handler);

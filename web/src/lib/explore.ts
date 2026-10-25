@@ -36,7 +36,9 @@ export type ExploreFilters = {
 export const DEFAULT_FILTERS: ExploreFilters = {
   positive: [],
   negative: [],
-  allow: [],
+  // Cafy targets the UK and Ireland out of the box (expanded to cities/nations
+  // by core/location-regions.mjs when the scan filter is written).
+  allow: ["UK", "Ireland"],
   block: [],
   blockHard: [],
   alwaysAllow: [],
@@ -163,8 +165,8 @@ export function parseExplorePatch(
   }
   if (raw.since !== undefined) next.sinceDays = clampNum(raw.since, 1, 60, base.sinceDays);
   if (raw.sinceDays !== undefined) next.sinceDays = clampNum(raw.sinceDays, 1, 60, base.sinceDays);
-  if (raw.limit !== undefined) next.limitPerAts = clampNum(raw.limit, 50, 500, base.limitPerAts);
-  if (raw.limitPerAts !== undefined) next.limitPerAts = clampNum(raw.limitPerAts, 50, 500, base.limitPerAts);
+  if (raw.limit !== undefined) next.limitPerAts = clampNum(raw.limit, 50, 1500, base.limitPerAts);
+  if (raw.limitPerAts !== undefined) next.limitPerAts = clampNum(raw.limitPerAts, 50, 1500, base.limitPerAts);
   if (raw.ats !== undefined) next.ats = cleanAts(raw.ats);
   return next;
 }

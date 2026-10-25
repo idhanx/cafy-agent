@@ -531,6 +531,26 @@ const EXEMPT = new Map([
     // alias readdir happened to reach first. Two mutually-constraining passes
     // over one tree is not a walk with options; it is a different algorithm.
   ]],
+  ['web/src/lib/hosted-sync.mjs', [
+    'walk',
+    // Lists the files of a hosted deployment's temporary data folder (a scratch
+    // directory under /tmp, never a checkout) to decide what to upload to Blob
+    // storage. web/ cannot import lib/walk-tree.mjs — it ships without the core —
+    // and the nested-checkout guard has nothing to guard here: the folder holds
+    // only the client's files plus symlinks to engine files, which it skips.
+  ]],
+  ['web/src/lib/blob-store.mjs', [
+    'walk', 'list',
+    // dirStore is a directory standing in for a Blob store when trying the hosted
+    // mode on a laptop. Same reasons as hosted-sync.mjs: a plain scratch directory,
+    // in web/, where the shared walker is out of reach.
+  ]],
+  ['web/scripts/engine-closure.mjs', [
+    'walk',
+    // Reads web/src's own source files at build time to find which engine scripts
+    // the app names. Not a repository walk: web/src has no nested checkouts, and
+    // web/ cannot import the core's lib/walk-tree.mjs.
+  ]],
 ]);
 
 test('lib/walk-tree.mjs holds the only recursive directory walker in the repo', () => {

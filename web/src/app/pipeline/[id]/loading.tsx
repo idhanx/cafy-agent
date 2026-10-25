@@ -33,7 +33,7 @@ export default function ReportLoading() {
           <Skeleton className="h-4 w-3/4" />
         </div>
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="mt-3 overflow-hidden rounded-xl border border-border bg-surface/30">
+          <div key={i} className="mt-3 overflow-hidden rounded-xl border border-border bg-surface">
             <div className="flex min-h-[44px] items-center gap-2 px-4 py-3">
               <Skeleton className="h-4 w-40" />
               <Skeleton className="ml-auto size-4 rounded-full" />

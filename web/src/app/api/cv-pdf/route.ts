@@ -6,6 +6,7 @@ import { careerOpsRoot, isRegularContainedFile, pdfPathStatusForReport } from "@
 import { companySlug } from "@/lib/company-slug.mjs";
 import { inlineDisposition } from "@/lib/content-disposition.mjs";
 import { matchesTailoredCv, sortNewestFirst } from "@/lib/apply/cv-match.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,7 +31,7 @@ function servePdf(file: string): Response {
 // manifest existed. The fallback uses the SAME matching contract as
 // resolveTailoredCv (see cv-match.mjs) so this and the apply flow always land
 // on the same file.
-export async function GET(req: NextRequest) {
+async function GET_handler(req: NextRequest) {
   const n = (req.nextUrl.searchParams.get("n") ?? "").trim();
   const company = (req.nextUrl.searchParams.get("company") ?? "").trim();
   const application = (req.nextUrl.searchParams.get("application") ?? "").trim();
@@ -115,3 +116,5 @@ export async function GET(req: NextRequest) {
     return new Response("could not read the PDF", { status: 500 });
   }
 }
+
+export const GET = hostedSync(GET_handler);

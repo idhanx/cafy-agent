@@ -16,6 +16,7 @@ import { fencingReport } from "@/lib/cli-fencing.mjs";
 const ADVISOR_SCOPE = scopeFrom("Read,WebFetch,Glob,Grep");
 import { readPersonalizationState } from "@/lib/personalization-file.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 /**
  * Human labels of the modes/_profile.md sections still identical to the template.
@@ -40,7 +41,7 @@ export const maxDuration = 120;
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ message?: string; cliId?: string; history?: Msg[]; pageContext?: string }>(req);
   if (!body) return new Response(JSON.stringify({ error: "bad json" }), { status: 400 });
   const { message, cliId: requestedCliId, pageContext } = body;
@@ -249,3 +250,5 @@ export async function POST(req: Request) {
     },
   });
 }
+
+export const POST = hostedSync(POST_handler);

@@ -3,6 +3,7 @@ import { careerOpsRoot, rootScript, trackerCanDelete } from "@/lib/career-ops";
 import { isTrackerWriting } from "@/lib/core/run-registry";
 import { parseOrphanReport } from "@/lib/tracker-delete-output.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,7 +19,7 @@ export const dynamic = "force-dynamic";
 // nothing and can overlap.
 let deleting = false;
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ n?: string | number; dryRun?: boolean }>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const num = String(body.n ?? "").trim();
@@ -94,3 +95,5 @@ export async function POST(req: Request) {
     if (!dryRun) deleting = false;
   }
 }
+
+export const POST = hostedSync(POST_handler);

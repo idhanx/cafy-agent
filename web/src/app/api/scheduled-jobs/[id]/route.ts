@@ -4,12 +4,13 @@ import {
   patchScheduledJob,
   ScheduledJobValidationError,
 } from "@/lib/scheduled-jobs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
-export async function PATCH(req: Request, { params }: RouteContext) {
+async function PATCH_handler(req: Request, { params }: RouteContext) {
   const { id } = await params;
   try {
     const body = await req.json();
@@ -23,7 +24,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
   }
 }
 
-export async function DELETE(_req: Request, { params }: RouteContext) {
+async function DELETE_handler(_req: Request, { params }: RouteContext) {
   const { id } = await params;
   try {
     const job = await deleteScheduledJob(id);
@@ -33,3 +34,6 @@ export async function DELETE(_req: Request, { params }: RouteContext) {
     return NextResponse.json({ error: status === 409 ? "Scheduled jobs are busy; try again." : "Could not delete scheduled job." }, { status });
   }
 }
+
+export const PATCH = hostedSync(PATCH_handler);
+export const DELETE = hostedSync(DELETE_handler);

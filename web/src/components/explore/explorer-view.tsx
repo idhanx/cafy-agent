@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Compass, ChevronDown, RotateCcw, AlertTriangle, Sparkles, Settings } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
-import { instrumentSerif } from "@/lib/fonts";
+import { displayFont } from "@/lib/fonts";
 import type { Application, InboxJob } from "@/lib/career-ops";
 import { normalizeTextKey } from "@/lib/core/normalize-text-key.mjs";
 import { paramsToFilters, paramsToAi, type ExploreFilters } from "@/lib/explore";
@@ -127,8 +127,8 @@ export function ExplorerView({
       <header className="mb-6">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2.5">
-            <Compass className="size-6 text-brand" />
-            <h1 className={`${instrumentSerif.className} text-3xl text-foreground`}>Explore</h1>
+            <Compass className="size-6 text-brand-text" />
+            <h1 className={`${displayFont.className} text-3xl text-foreground`}>Find jobs</h1>
             <span className="rounded-full border border-brand/30 bg-brand-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-text">New</span>
           </div>
           <div className="w-full sm:ml-auto sm:w-auto">
@@ -146,7 +146,7 @@ export function ExplorerView({
 
       {!rootExists && (
         <div className="mb-5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
-          Your career-ops home isn’t set up yet — discovery needs a checkout with a profile to seed from.
+          Your Cafy Agent home isn’t set up yet — discovery needs a checkout with a profile to seed from.
         </div>
       )}
 
@@ -179,9 +179,9 @@ export function ExplorerView({
       ) : (
         <>
           {isResults && !employer ? (
-            <div className="mb-6 rounded-xl border border-border bg-surface/30">
+            <div className="mb-6 rounded-xl border border-border bg-surface">
               <button type="button" onClick={() => setRefineOpen((v) => !v)} className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium text-foreground">
-                <Compass className="size-4 text-brand" /> Refine search
+                <Compass className="size-4 text-brand-text" /> Refine search
                 <ChevronDown className={cn("ml-auto size-4 text-muted transition-transform", refineOpen && "rotate-180")} />
               </button>
               {refineOpen && (
@@ -192,7 +192,7 @@ export function ExplorerView({
               )}
             </div>
           ) : (
-            <div className="mb-6 rounded-2xl border border-border bg-surface/30 p-5">
+            <div className="mb-6 rounded-2xl border border-border bg-surface p-5">
               <FilterBuilder filters={filters} onChange={setFilters} seededFrom={seed.seededFrom} disabled={running} />
               <div className="mt-5">
                 <DiscoverBar canDiscover={canDiscover} onDiscover={discover} label="Discover (free)" filters={filters} />
@@ -204,7 +204,7 @@ export function ExplorerView({
             <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3">
               <Sparkles className="mt-0.5 size-4 shrink-0 text-emerald-500" />
               <p className="text-[13px] leading-relaxed text-foreground">
-                These are live roles that match your CV. <span className="text-emerald-600 dark:text-emerald-400">Nothing here cost you a token.</span> Pick the one you&apos;re most curious about — Evaluate it and I&apos;ll tell you exactly how you score, and why.
+                These are live roles that match your search. <span className="text-emerald-600 dark:text-emerald-400">Nothing here cost you a token.</span> Pick the one you&apos;re most curious about — Evaluate it and I&apos;ll tell you exactly how you score, and why.
               </p>
             </div>
           )}
@@ -278,7 +278,7 @@ function DiscoverBar({ canDiscover, onDiscover, label, filters }: { canDiscover:
         aria-disabled={!canDiscover}
         aria-describedby={filters.preset === CHINA_PRESET ? "employer-selection" : undefined}
         onClick={() => { if (canDiscover) onDiscover(); }}
-        className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-brand-foreground shadow-sm transition-all hover:brightness-110 disabled:opacity-50 max-sm:min-h-[44px]"
+        className="inline-flex items-center gap-2 rounded-xl bg-inverse px-5 py-2.5 text-sm font-semibold text-inverse-foreground shadow-sm transition-all hover:bg-inverse/80 disabled:opacity-50 max-sm:min-h-[44px]"
       >
         <Compass className="size-4" /> {label}
       </button>
@@ -293,14 +293,14 @@ function DiscoverBar({ canDiscover, onDiscover, label, filters }: { canDiscover:
 
 function EmptyState({ tone, title, body, note, onRerun, rerunLabel }: { tone: "good" | "loose"; title: string; body: string; note?: string; onRerun: () => void; rerunLabel: string }) {
   return (
-    <div className="rounded-2xl border border-border bg-surface/30 px-6 py-12 text-center">
-      <div className={cn("mx-auto grid size-12 place-items-center rounded-full", tone === "good" ? "bg-emerald-500/12 text-emerald-500" : "bg-brand-soft text-brand")}>
+    <div className="rounded-2xl border border-border bg-surface px-6 py-12 text-center">
+      <div className={cn("mx-auto grid size-12 place-items-center rounded-full", tone === "good" ? "bg-emerald-500/12 text-emerald-500" : "bg-brand-soft text-brand-text")}>
         <Sparkles className="size-6" />
       </div>
-      <h2 className={`${instrumentSerif.className} mt-4 text-2xl text-foreground`}>{title}</h2>
+      <h2 className={`${displayFont.className} mt-4 text-2xl text-foreground`}>{title}</h2>
       <p className="mx-auto mt-1.5 max-w-md text-sm text-muted">{body}</p>
       {note && <p className="mx-auto mt-1 max-w-md text-[12px] text-faint">{note}</p>}
-      <button onClick={onRerun} className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface/50 px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:border-brand/40 hover:text-brand">
+      <button onClick={onRerun} className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:border-brand/40 hover:text-brand-text">
         <RotateCcw className="size-4" /> {rerunLabel}
       </button>
     </div>
@@ -343,7 +343,7 @@ function DegradedCard({
       <AlertTriangle className="mx-auto size-6 text-amber-500" />
       <p className="mt-2 text-sm font-medium text-foreground">{title}</p>
       <p className="mx-auto mt-1 max-w-md text-[13px] text-muted">{body}</p>
-      <button onClick={onRetry} className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-brand-soft px-3 py-1.5 text-sm font-medium text-brand">
+      <button onClick={onRetry} className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-brand-soft px-3 py-1.5 text-sm font-medium text-brand-text">
         <RotateCcw className="size-4" /> Retry the scan
       </button>
     </div>
@@ -359,7 +359,7 @@ function CappedBanner({ companiesScanned, companiesAvailable, onRefine }: { comp
         Showing a capped slice — searched {companiesScanned.toLocaleString()}
         {companiesAvailable > companiesScanned ? ` of ${companiesAvailable.toLocaleString()}` : ""} companies.
       </span>
-      <button onClick={onRefine} className="font-medium text-brand hover:underline">
+      <button onClick={onRefine} className="font-medium text-brand-text hover:underline">
         Raise scan depth to search deeper
       </button>
     </div>
@@ -376,20 +376,20 @@ function FailedCard({ msg, scannerMissing, onRetry }: { msg: string; scannerMiss
   // failures. Neither may be misreported as a broken checkout.
   if (scannerMissing) {
     return (
-      <div className="rounded-2xl border border-border bg-surface/30 px-6 py-10 text-center">
-        <div className="mx-auto grid size-12 place-items-center rounded-full bg-brand-soft text-brand">
+      <div className="rounded-2xl border border-border bg-surface px-6 py-10 text-center">
+        <div className="mx-auto grid size-12 place-items-center rounded-full bg-brand-soft text-brand-text">
           <Compass className="size-6" />
         </div>
-        <h2 className={`${instrumentSerif.className} mt-4 text-2xl text-foreground`}>Discovery needs the full toolkit</h2>
+        <h2 className={`${displayFont.className} mt-4 text-2xl text-foreground`}>Discovery needs the full toolkit</h2>
         <p className="mx-auto mt-1.5 max-w-md text-sm text-muted">
-          Your career-ops home looks data-only or is on an older version. The free scanner ships with a complete checkout —
+          Your Cafy Agent home looks data-only or is on an older version. The free scanner ships with a complete checkout —
           update career-ops, or paste a job URL on the pipeline to evaluate it directly.
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
-          <Link href="/pipeline" className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-sm font-semibold text-brand-foreground transition hover:brightness-110">
+          <Link href="/pipeline" className="inline-flex items-center gap-1.5 rounded-full bg-inverse px-3.5 py-2 text-sm font-semibold text-inverse-foreground transition hover:bg-inverse/80">
             Open pipeline
           </Link>
-          <Link href="/config" className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium text-foreground transition hover:border-brand/40 hover:text-brand">
+          <Link href="/config" className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium text-foreground transition hover:border-brand/40 hover:text-brand-text">
             Open Config
           </Link>
         </div>
@@ -401,7 +401,7 @@ function FailedCard({ msg, scannerMissing, onRetry }: { msg: string; scannerMiss
       <AlertTriangle className="mx-auto size-6 text-amber-500" />
       <p className="mt-2 text-sm font-medium text-foreground">Couldn’t finish the search.</p>
       <p className="mt-1 text-[13px] text-muted">{msg}</p>
-      <button onClick={onRetry} className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-brand-soft px-3 py-1.5 text-sm font-medium text-brand">
+      <button onClick={onRetry} className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-brand-soft px-3 py-1.5 text-sm font-medium text-brand-text">
         <RotateCcw className="size-4" /> Try again
       </button>
     </div>
@@ -410,16 +410,16 @@ function FailedCard({ msg, scannerMissing, onRetry }: { msg: string; scannerMiss
 
 function BlockedCard() {
   return (
-    <div className="rounded-2xl border border-border bg-surface/30 px-6 py-12 text-center">
-      <div className="mx-auto grid size-12 place-items-center rounded-full bg-brand-soft text-brand">
+    <div className="rounded-2xl border border-border bg-surface px-6 py-12 text-center">
+      <div className="mx-auto grid size-12 place-items-center rounded-full bg-brand-soft text-brand-text">
         <Sparkles className="size-6" />
       </div>
-      <h2 className={`${instrumentSerif.className} mt-4 text-2xl text-foreground`}>AI search needs a CLI</h2>
+      <h2 className={`${displayFont.className} mt-4 text-2xl text-foreground`}>AI search needs an AI provider</h2>
       <p className="mx-auto mt-1.5 max-w-md text-sm text-muted">
-        Connect Claude Code, Gemini, or any agent CLI — your key, your tokens, your machine. The free Scan stays available without one.
+        Connect an AI provider in Settings — your key, your usage. The free Scan stays available without one.
       </p>
-      <Link href="/config" className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-sm font-semibold text-brand-foreground transition hover:brightness-110">
-        <Settings className="size-4" /> Open Config
+      <Link href="/config" className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-inverse px-3.5 py-2 text-sm font-semibold text-inverse-foreground transition hover:bg-inverse/80">
+        <Settings className="size-4" /> Open Settings
       </Link>
     </div>
   );

@@ -5,6 +5,7 @@ import { CHANNELS, isRealISODate, localISODate } from "@/lib/followups";
 import { parseFollowupId } from "@/lib/followup-id.mjs";
 import { followupsLogPath, withFollowupsWrite, followupsWriteError } from "@/lib/followups-server";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -28,7 +29,7 @@ function cell(v: unknown, max?: number): string {
 
 const TABLE_HEADER = "| num | appNum | date | company | role | channel | contact | notes |\n|---|---|---|---|---|---|---|---|\n";
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{
     appNum?: string | number;
     num?: string | number; // legacy alias for appNum (old home-card payload)
@@ -106,7 +107,7 @@ export async function POST(req: Request) {
 // from the history panel). Only the matching table row is dropped; every other
 // byte of the file (header, other rows, legacy bullets) is preserved. Legacy
 // bullets carry no num and cannot be deleted here.
-export async function DELETE(req: Request) {
+async function DELETE_handler(req: Request) {
   const body = await readJsonObject<{ num?: string | number }>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const num = parseFollowupId(body.num);
@@ -131,3 +132,6 @@ export async function DELETE(req: Request) {
     return followupsWriteError(e, "delete failed");
   }
 }
+
+export const POST = hostedSync(POST_handler);
+export const DELETE = hostedSync(DELETE_handler);

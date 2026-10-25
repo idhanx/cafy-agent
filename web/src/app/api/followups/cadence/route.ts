@@ -9,6 +9,7 @@ import { isMapping } from "@/lib/portals-config.mjs";
 import { PROFILE_CADENCE_KEYS, type ProfileCadenceKey } from "@/lib/followups";
 import { readJsonObject } from "@/lib/json-body";
 import { followupsEnabledFromProfile } from "@/lib/followups-setting.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -74,7 +75,7 @@ async function readCoreDefaults(): Promise<Partial<Record<ProfileCadenceKey, num
   }
 }
 
-export async function GET() {
+async function GET_handler() {
   const file = getProfilePath(careerOpsRoot());
   const overrides: Partial<Record<ProfileCadenceKey, number>> = {};
   let enabled = true;
@@ -100,7 +101,7 @@ export async function GET() {
   return Response.json({ defaults: defaults ?? {}, defaultsAvailable: defaults !== null, overrides, effective, enabled });
 }
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<Record<string, unknown>>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
 
@@ -163,3 +164,6 @@ export async function POST(req: Request) {
   }
   return Response.json({ ok: true, followup_cadence: merged.followup_cadence, follow_ups: merged.follow_ups });
 }
+
+export const GET = hostedSync(GET_handler);
+export const POST = hostedSync(POST_handler);

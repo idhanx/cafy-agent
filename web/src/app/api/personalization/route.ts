@@ -5,6 +5,7 @@ import { atomicWriteWithBackup } from "@/lib/core/safe-write";
 import { coercePersonalization, SECTIONS } from "@/lib/personalization.mjs";
 import { readPersonalizationState, savePersonalization, UnsureProfileParseError } from "@/lib/personalization-file.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -35,7 +36,7 @@ async function corePersonalization() {
   return import(/* webpackIgnore: true */ pathToFileURL(rootScript("lib/personalization")).href);
 }
 
-export async function GET() {
+async function GET_handler() {
   try {
     const core = await corePersonalization();
     return Response.json(readPersonalizationState(careerOpsRoot(), codeRoot(), core));
@@ -44,7 +45,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<Record<string, unknown>>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const patch = coercePersonalization(body) as Record<string, unknown>;
@@ -65,3 +66,6 @@ export async function POST(req: Request) {
     return failure(e);
   }
 }
+
+export const GET = hostedSync(GET_handler);
+export const POST = hostedSync(POST_handler);

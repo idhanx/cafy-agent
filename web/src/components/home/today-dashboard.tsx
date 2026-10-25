@@ -4,8 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Bell, CircleHelp, Sparkles, ArrowRight } from "lucide-react";
-import { instrumentSerif } from "@/lib/fonts";
-import { HeroGlow } from "@/components/hero-glow";
+import { displayFont } from "@/lib/fonts";
 import type { Application, InboxJob } from "@/lib/career-ops";
 import type { DiscoveredOffer } from "@/lib/explore";
 import { DiscoveryCard } from "@/components/explore/discovery-card";
@@ -145,18 +144,16 @@ export function TodayDashboard({
   const inboxUrls = useMemo(() => new Set(inbox.map((j) => j.url)), [inbox]);
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 max-sm:pb-24">
-      <section className="dot-bg relative overflow-hidden rounded-2xl border border-border bg-surface/40 px-7 py-10 md:px-10 md:py-12">
-        <HeroGlow />
-        {/* Readability scrim between the animated glow (z-0) and the copy (z-10). */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 z-[1] bg-surface/55 backdrop-blur-[2px] dark:bg-background/45" />
+    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 max-sm:pb-24">
+      <section className="relative overflow-hidden rounded-[2.5rem] border border-border bg-surface px-6 py-8 md:px-9 md:py-10">
+        <div aria-hidden className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-brand to-brand-200" />
         <div className="relative z-10">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-            <span className="text-faint">//</span> today · <span className="tabular-nums">{dateLabel}</span>
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-text">
+            Your day · <span className="tabular-nums normal-case tracking-normal text-muted">{dateLabel}</span>
           </p>
-          <h1 className={`${instrumentSerif.className} mt-3 text-4xl leading-[1.05] text-landing md:text-5xl`}>
+          <h1 className={`${displayFont.className} mt-2 text-3xl leading-tight text-landing md:text-4xl`}>
             {heroState === "loading" ? (
-              <>Your career queue is loading.</>
+              <>Your job search is loading.</>
             ) : heroState === "unavailable" ? (
               <>Some updates are unavailable.</>
             ) : allClear ? (
@@ -165,13 +162,13 @@ export function TodayDashboard({
               <>
                 {shown.newThisWeek > 0 && (
                   <>
-                    <span className="text-brand tabular-nums">{shown.newThisWeek}</span> new match{shown.newThisWeek === 1 ? "" : "es"} this week
+                    <span className="text-brand-text tabular-nums">{shown.newThisWeek}</span> new match{shown.newThisWeek === 1 ? "" : "es"} this week
                   </>
                 )}
                 {shown.newThisWeek > 0 && shown.overdue > 0 && <span className="text-faint"> · </span>}
                 {shown.overdue > 0 && (
                   <>
-                    <span className="text-brand tabular-nums">{shown.overdue}</span> follow-up{shown.overdue === 1 ? "" : "s"} due
+                    <span className="text-brand-text tabular-nums">{shown.overdue}</span> follow-up{shown.overdue === 1 ? "" : "s"} due
                   </>
                 )}
                 {/* queue-partial with work known only from the server snapshot:
@@ -195,11 +192,11 @@ export function TodayDashboard({
                     : "Your action queue for today, in one place."}
           </p>
           <div className="mt-6 flex flex-wrap gap-2.5">
-            <Link href="/explore" className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-brand-foreground transition hover:bg-brand-200 max-sm:min-h-[44px]">
+            <Link href="/explore" className="inline-flex items-center gap-2 rounded-full bg-inverse px-5 py-2.5 text-sm font-medium text-inverse-foreground transition hover:bg-inverse/80 max-sm:min-h-[44px]">
               Find new roles <ArrowRight className="size-4" />
             </Link>
-            <Link href="/pipeline" className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-brand/40 hover:text-brand max-sm:min-h-[44px]">
-              Open pipeline
+            <Link href="/pipeline" className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-brand/40 hover:text-brand-text max-sm:min-h-[44px]">
+              View my applications
             </Link>
           </div>
           {inBetween && <QuickEvaluate />}
@@ -207,9 +204,9 @@ export function TodayDashboard({
       </section>
 
       {dataError && !dataLoading && (
-        <div role="alert" className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface/40 px-5 py-4 text-sm text-muted">
+        <div role="alert" className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface px-5 py-4 text-sm text-muted">
           <p>{missingSources} could not be loaded.</p>
-          <button type="button" onClick={refetch} className="font-medium text-brand hover:underline">Retry updates</button>
+          <button type="button" onClick={refetch} className="font-medium text-brand-text hover:underline">Retry updates</button>
         </div>
       )}
 
@@ -238,7 +235,7 @@ export function TodayDashboard({
               <li key={`${item.num ?? item.company}-${item.nextFollowupDate ?? ""}`}>
                 <Link
                   href={item.num != null ? `/pipeline/${item.num}` : "/followups"}
-                  className="text-sm text-muted hover:text-brand"
+                  className="text-sm text-muted hover:text-brand-text"
                 >
                   <span className="font-medium text-foreground">{item.company}</span>
                   {item.role ? <span> · {item.role}</span> : null}
@@ -256,7 +253,7 @@ export function TodayDashboard({
           {recommended.length > 0 && (
             <Link
               href={`/pipeline/${recommended[0].n}`}
-              className="mb-3 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition hover:bg-brand-200 max-sm:min-h-[44px]"
+              className="mb-3 inline-flex items-center gap-2 rounded-full bg-inverse px-4 py-2 text-sm font-medium text-inverse-foreground transition hover:bg-inverse/80 max-sm:min-h-[44px]"
             >
               Apply next · {companyPresentation(recommended[0]).label} {recommended[0].score} <ArrowRight className="size-4" />
             </Link>
@@ -283,7 +280,7 @@ export function TodayDashboard({
             ))}
           </div>
           {fresh.length > 6 && (
-            <Link href="/explore?view=fresh" className="mt-3 inline-flex items-center text-sm text-muted transition hover:text-brand max-sm:min-h-[44px]">
+            <Link href="/explore?view=fresh" className="mt-3 inline-flex items-center text-sm text-muted transition hover:text-brand-text max-sm:min-h-[44px]">
               See all {freshCount} →
             </Link>
           )}
@@ -291,10 +288,10 @@ export function TodayDashboard({
       )}
 
       {allClear && upcoming.length === 0 && (
-        <div className="mt-8 rounded-2xl border border-border bg-surface/30 px-6 py-10 text-center">
-          <Sparkles className="mx-auto size-6 text-brand" />
+        <div className="mt-8 rounded-2xl border border-border bg-surface px-6 py-10 text-center">
+          <Sparkles className="mx-auto size-6 text-brand-text" />
           <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-            Nothing needs you right now. Run a <Link href="/explore" className="text-brand hover:underline">free scan</Link> to surface this week&apos;s roles, or check your <Link href="/pipeline" className="text-brand hover:underline">pipeline</Link>.
+            Nothing needs you right now. Browse <Link href="/explore" className="text-brand-text hover:underline">new jobs</Link> to see this week&apos;s roles, or check your <Link href="/pipeline" className="text-brand-text hover:underline">applications</Link>.
           </p>
         </div>
       )}
@@ -304,11 +301,11 @@ export function TodayDashboard({
 
 function Section({ icon: Icon, title, hint, children }: { icon: React.ComponentType<{ className?: string }>; title: string; hint: string; children: React.ReactNode }) {
   return (
-    <section className="mt-10">
-      <div className="mb-3 flex items-center gap-2">
-        <Icon className="size-4 text-brand" />
-        <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">{title}</h2>
-        <span className="text-xs text-faint">· {hint}</span>
+    <section className="mt-4 rounded-xl border border-border bg-surface p-5">
+      <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+        <Icon className="size-5 text-brand-text" />
+        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+        <span className="text-sm text-muted">· {hint}</span>
       </div>
       {children}
     </section>

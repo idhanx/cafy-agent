@@ -284,8 +284,8 @@ export function InboxTriage({ inbox }: { inbox: InboxJob[] }) {
       {/* multi-select action bar */}
       {selected.size > 0 && (
         <div className="mt-2 flex items-center gap-3 rounded-lg border border-brand/30 bg-brand-soft px-3 py-2 text-sm">
-          <span className="font-medium text-brand tabular-nums">{selected.size} selected</span>
-          <button type="button" onClick={saveSelected} className="rounded-md bg-brand px-2.5 py-1 text-xs font-medium text-brand-foreground max-sm:min-h-[44px]">
+          <span className="font-medium text-brand-text tabular-nums">{selected.size} selected</span>
+          <button type="button" onClick={saveSelected} className="rounded-full bg-inverse px-2.5 py-1 text-xs font-medium text-inverse-foreground max-sm:min-h-[44px]">
             Save to shortlist
           </button>
           <button type="button" onClick={() => setSelected(new Set())} className="text-xs text-muted hover:text-foreground max-sm:min-h-[44px]">
@@ -295,7 +295,7 @@ export function InboxTriage({ inbox }: { inbox: InboxJob[] }) {
       )}
 
       {visible.length > 0 ? (
-        <ul className="mt-3 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface/40">
+        <ul className="mt-3 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
           {visible.map((e) => (
             <TriageRow
               key={e.job.url}
@@ -312,7 +312,7 @@ export function InboxTriage({ inbox }: { inbox: InboxJob[] }) {
           ))}
         </ul>
       ) : (
-        <div className="mt-3 rounded-2xl border border-dashed border-border bg-surface/30 px-6 py-10 text-center">
+        <div className="mt-3 rounded-2xl border border-dashed border-border bg-surface px-6 py-10 text-center">
           <p className="font-display text-lg">No matches</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Loosen the filters to see more of your inbox.</p>
         </div>
@@ -323,7 +323,7 @@ export function InboxTriage({ inbox }: { inbox: InboxJob[] }) {
         <button
           type="button"
           onClick={() => setShowAll(true)}
-          className="mt-3 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-border bg-surface/40 py-2.5 text-sm font-medium text-muted transition-colors hover:border-brand/40 hover:text-brand max-sm:min-h-[44px]"
+          className="mt-3 inline-flex w-full items-center justify-center gap-1 rounded-xl border border-border bg-surface py-2.5 text-sm font-medium text-muted transition-colors hover:border-brand/40 hover:text-brand-text max-sm:min-h-[44px]"
         >
           See all {ordered.length} in inbox →
         </button>
@@ -343,7 +343,7 @@ export function InboxTriage({ inbox }: { inbox: InboxJob[] }) {
               <span className="text-muted" role="status">{undo.label}</span>
               {undo.error && <p role="alert" className="text-red-600 dark:text-red-400">{undo.error}</p>}
             </div>
-            <button type="button" onClick={() => void handleUndo(undo)} disabled={undo.busy} aria-busy={Boolean(undo.busy)} className="inline-flex shrink-0 items-center gap-1 font-medium text-brand disabled:opacity-50 max-sm:min-h-[44px]">
+            <button type="button" onClick={() => void handleUndo(undo)} disabled={undo.busy} aria-busy={Boolean(undo.busy)} className="inline-flex shrink-0 items-center gap-1 font-medium text-brand-text disabled:opacity-50 max-sm:min-h-[44px]">
               <Undo2 className="size-3.5" /> {undo.busy ? "Undoing…" : undo.error ? "Retry undo" : "Undo"}
             </button>
           </div>

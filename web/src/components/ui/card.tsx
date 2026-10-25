@@ -22,7 +22,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-border bg-surface/50 p-5",
+        "relative overflow-hidden rounded-xl border border-border bg-surface p-5",
         corner && `${CORNERS[corner]} from-brand/10 via-transparent to-transparent bg-origin-border`,
         elevated && "shadow-lg",
         className,

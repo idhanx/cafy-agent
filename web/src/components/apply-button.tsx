@@ -37,7 +37,7 @@ export function ApplyButton({
         type="button"
         disabled
         title={!hasUrl ? "No application URL on this report" : "Generate the tailored CV (PDF) first to apply"}
-        className="inline-flex cursor-not-allowed items-center justify-center gap-1.5 rounded-full border border-border bg-surface/40 px-3.5 py-1 text-xs font-medium text-faint max-sm:min-h-[44px]"
+        className="inline-flex cursor-not-allowed items-center justify-center gap-1.5 rounded-full border border-border bg-surface px-3.5 py-1 text-xs font-medium text-faint max-sm:min-h-[44px]"
       >
         <Lock className="size-3.5" /> Apply
       </button>
@@ -59,7 +59,7 @@ export function ApplyButton({
       className={
         quiet
           ? "inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-transparent px-3.5 py-1 text-xs font-medium text-muted transition-colors hover:border-foreground/20 hover:text-foreground max-sm:min-h-[44px]"
-          : "inline-flex items-center justify-center gap-1.5 rounded-full bg-brand px-3.5 py-1 text-xs font-medium text-brand-foreground shadow-sm transition-colors hover:bg-brand-200 max-sm:min-h-[44px]"
+          : "inline-flex items-center justify-center gap-1.5 rounded-full bg-inverse px-3.5 py-1 text-xs font-medium text-inverse-foreground shadow-sm transition-colors hover:bg-inverse/80 max-sm:min-h-[44px]"
       }
       title={
         quiet

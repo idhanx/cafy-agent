@@ -5,6 +5,7 @@ import {
   parseScheduledJobInput,
   ScheduledJobValidationError,
 } from "@/lib/scheduled-jobs";
+import { hostedSync } from "@/lib/hosted-route";
 
 function apiError(error: unknown, fallback: string) {
   if (error instanceof ScheduledJobValidationError || (error instanceof SyntaxError)) return { status: 400, body: { error: error.message || fallback } };
@@ -15,7 +16,7 @@ function apiError(error: unknown, fallback: string) {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+async function GET_handler() {
   try {
     return NextResponse.json(listScheduledJobs(), { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
@@ -24,7 +25,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   try {
     const fields = parseScheduledJobInput(await req.json());
     const job = await createScheduledJob(fields);
@@ -34,3 +35,6 @@ export async function POST(req: Request) {
     return NextResponse.json(failure.body, { status: failure.status });
   }
 }
+
+export const GET = hostedSync(GET_handler);
+export const POST = hostedSync(POST_handler);

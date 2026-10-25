@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Loading() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-10 max-sm:pb-24" aria-label="Loading today">
-      <section className="dot-bg relative overflow-hidden rounded-2xl border border-border bg-surface/40 px-7 py-10 md:px-10 md:py-12">
+      <section className="dot-bg relative overflow-hidden rounded-2xl border border-border bg-surface px-7 py-10 md:px-10 md:py-12">
         <div className="relative z-10">
           <Skeleton className="h-3 w-44" />
           <div className="mt-4 space-y-2">
@@ -29,7 +29,7 @@ export default function Loading() {
         </div>
         <div className="grid gap-2.5 sm:grid-cols-2">
           {Array.from({ length: 2 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-border bg-surface/40 p-3.5">
+            <div key={i} className="rounded-xl border border-border bg-surface p-3.5">
               <Skeleton className="h-4 w-3/4" />
               <Skeleton className="mt-2 h-3 w-1/2" />
               <Skeleton className="mt-5 h-8 w-full rounded-md" />

@@ -5,8 +5,8 @@ import { readFileSync } from "node:fs";
 const fontsSource = readFileSync(new URL("../../src/lib/fonts.ts", import.meta.url), "utf8");
 const assets = [
   "../../src/assets/fonts/inter/Inter-Latin-Variable.woff2",
-  "../../src/assets/fonts/instrument-serif/InstrumentSerif-Latin-Regular.woff2",
-  "../../src/assets/fonts/instrument-serif/InstrumentSerif-Latin-Italic.woff2",
+  "../../src/assets/fonts/titillium-web/titillium-web-latin-600-normal.woff2",
+  "../../src/assets/fonts/titillium-web/titillium-web-latin-700-normal.woff2",
 ];
 
 test("web fonts are local and never use the Google build-time loader", () => {
@@ -24,11 +24,11 @@ test("every configured WOFF2 asset is vendored", () => {
   }
 });
 
-test("both vendored font families include their OFL license", () => {
+test("the vendored font family includes their OFL license", () => {
   for (const relativePath of [
     "../../src/assets/fonts/inter/OFL.txt",
-    "../../src/assets/fonts/instrument-serif/OFL.txt",
+    "../../src/assets/fonts/titillium-web/OFL.txt",
   ]) {
-    assert.match(readFileSync(new URL(relativePath, import.meta.url), "utf8"), /SIL OPEN FONT LICENSE Version 1\.1/);
+    assert.match(readFileSync(new URL(relativePath, import.meta.url), "utf8"), /SIL OPEN FONT LICENSE,? Version 1\.1/i);
   }
 });

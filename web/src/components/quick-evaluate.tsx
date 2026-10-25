@@ -27,7 +27,7 @@ export function QuickEvaluate() {
   return (
     <div className="mt-7">
       <div className="flex max-w-xl items-center gap-2 rounded-full border border-border bg-surface/70 py-1.5 pl-4 pr-1.5 shadow-sm focus-within:border-brand/50">
-        <Sparkles className="size-4 shrink-0 text-brand/70" />
+        <Sparkles className="size-4 shrink-0 text-brand-text/70" />
         <input
           value={url}
           onChange={(e) => {
@@ -42,14 +42,14 @@ export function QuickEvaluate() {
         />
         <button
           onClick={run}
-          className="shrink-0 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200"
+          className="shrink-0 rounded-full bg-inverse px-4 py-1.5 text-sm font-medium text-inverse-foreground transition-colors hover:bg-inverse/80"
         >
           Evaluate
         </button>
       </div>
       <div className="mt-2 flex items-center gap-2">
         <CostBadge kind="spend" size="xs" />
-        <span className="text-xs text-faint">Evaluation runs on your own AI — your key, your machine.</span>
+        <span className="text-xs text-faint">Evaluation runs on your own AI provider — your key.</span>
       </div>
       {hint && <p className="mt-1 text-xs text-faint">{hint}</p>}
     </div>

@@ -25,12 +25,14 @@ import { profileRef } from "@/lib/core/profile-path.mjs";
 import { acquireTrackerWrite, releaseTrackerWrite } from "@/lib/core/run-registry";
 import { createRunFinalizer } from "@/lib/run-finalizer.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
+import { prepareHostedChromium } from "@/lib/hosted-runtime";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 800; // a real oferta evaluation / pdf-mode CV tailoring + render is heavy and multi-step
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ kind?: string; input?: string; cliId?: string; brief?: unknown }>(req);
   if (!body) return new Response(JSON.stringify({ error: "bad json" }), { status: 400 });
   const { kind = "evaluate", input, cliId: requestedCliId, brief } = body;
@@ -460,6 +462,7 @@ export async function POST(req: Request) {
       };
       const renderPdf = async (paths: PdfPaths, format: "letter" | "a4") => {
         send({ type: "status", label: "Rendering PDF…" });
+        await prepareHostedChromium();
         // renderAndMarkPdf is designed to resolve, never throw — but this is
         // the one place nothing else awaits or catches this promise (cancel()
         // only attaches a .finally for the write-token release), so an
@@ -636,3 +639,5 @@ export async function POST(req: Request) {
     },
   });
 }
+
+export const POST = hostedSync(POST_handler);

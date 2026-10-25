@@ -11,6 +11,7 @@ import { scopeFrom } from "@/lib/claude-invocation.mjs";
 import { fencingReport } from "@/lib/cli-fencing.mjs";
 import { codexFencingSupported } from "@/lib/cli-fencing-probe.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 // Deny list DERIVED, never hand-written: every one of the six advisor argvs
 // that spelled its own omitted MultiEdit, which --permission-mode acceptEdits
@@ -45,7 +46,7 @@ Follow modes/discover.md exactly. You are running headless for the web:
 - DEDUP: skip anything already known below; don't re-propose the user's existing companies.
 `;
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ query?: string; cliId?: string }>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const query = (body.query || "").trim();
@@ -442,3 +443,5 @@ export async function POST(req: Request) {
     },
   });
 }
+
+export const POST = hostedSync(POST_handler);

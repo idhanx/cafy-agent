@@ -59,7 +59,7 @@ const NAV_RE = /<<\s*go:\s*(\/[a-z0-9/_-]*)\s*>>/gi;
 const REMEMBER_RE = /<<\s*remember:\s*([^>]+?)\s*>>/gi;
 
 const GREETING =
-  "Hi — I'm your career-ops assistant. I can walk you through onboarding, answer questions about your pipeline, or take you where you need to go. What would you like to do?";
+  "Hi — I'm your Cafy Agent assistant. I can walk you through onboarding, answer questions about your pipeline, or take you where you need to go. What would you like to do?";
 
 // ── envelope parsing: act ONLY on complete <<act:ID {json}>> envelopes ────────
 function codeRanges(s: string): [number, number][] {
@@ -783,7 +783,7 @@ export function AssistantConsole() {
     const pending = pipeline.inbox.filter((j) => !j.done);
     if (!pipeline.applications.length && !pending.length) {
       return [
-        { label: "Help me get set up", send: "Help me get started with career-ops — what do you need from me?" },
+        { label: "Help me get set up", send: "Help me get started with Cafy Agent — what do you need from me?" },
         { label: "Improve my CV", send: "Look at my CV and suggest the highest-impact improvements." },
       ];
     }
@@ -879,7 +879,7 @@ export function AssistantConsole() {
                   <div
                     className={cn(
                       "max-w-[88%] rounded-2xl px-3.5 py-2 text-sm",
-                      m.role === "user" ? "bg-brand text-brand-foreground" : "w-full bg-surface-hover text-foreground",
+                      m.role === "user" ? "bg-inverse text-inverse-foreground" : "w-full bg-surface-hover text-foreground",
                     )}
                   >
                     {m.role === "user" ? (
@@ -906,9 +906,9 @@ export function AssistantConsole() {
                 <button
                   key={i}
                   onClick={() => send(s.send)}
-                  className="inline-flex items-center gap-1 rounded-full border border-border bg-surface/60 px-2.5 py-1 text-xs text-muted transition-colors hover:border-brand/40 hover:bg-brand-soft hover:text-brand"
+                  className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-1 text-xs text-muted transition-colors hover:border-brand/40 hover:bg-brand-soft hover:text-brand-text"
                 >
-                  <Sparkles className="size-3 text-brand/70" />
+                  <Sparkles className="size-3 text-brand-text/70" />
                   {s.label}
                 </button>
               ))}
@@ -919,7 +919,7 @@ export function AssistantConsole() {
             <Link
               href="/config"
               onClick={() => setOpen(false)}
-              className="mx-4 mb-2 flex items-center gap-2 rounded-lg border border-border bg-surface/50 px-3 py-2 text-xs text-muted transition-colors hover:bg-surface-hover hover:text-foreground"
+              className="mx-4 mb-2 flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-xs text-muted transition-colors hover:bg-surface-hover hover:text-foreground"
             >
               <Settings className="size-3.5" /> Pick a CLI in Config to enable the assistant →
             </Link>
@@ -945,7 +945,7 @@ export function AssistantConsole() {
                 rows={1}
                 disabled={!cliId}
                 style={{ maxHeight: INPUT_MAX_PX[size] }}
-                className="flex-1 resize-none rounded-xl border border-border bg-surface/60 px-3 py-2 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 disabled:opacity-50"
+                className="flex-1 resize-none rounded-xl border border-border bg-surface px-3 py-2 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 disabled:opacity-50"
               />
               <button
                 onClick={(e) => {
@@ -953,7 +953,7 @@ export function AssistantConsole() {
                   void send();
                 }}
                 disabled={busy || chatPending || !chatReady || !input.trim() || !cliId}
-                className="rounded-xl bg-brand p-2 text-brand-foreground transition-colors hover:bg-brand-200 disabled:opacity-40"
+                className="rounded-xl bg-inverse p-2 text-inverse-foreground transition-colors hover:bg-inverse/80 disabled:opacity-40"
                 aria-label="Send"
               >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
@@ -1010,7 +1010,7 @@ function PartView({
     const job = jobs.find((j) => j.id === part.jobId);
     if (!job)
       return (
-        <Link href={`/jobs/${part.jobId}`} className="block rounded-xl border border-border bg-surface/40 p-2.5 text-xs text-faint hover:text-foreground">
+        <Link href={`/jobs/${part.jobId}`} className="block rounded-xl border border-border bg-surface p-2.5 text-xs text-faint hover:text-foreground">
           Worker finished earlier — open log →
         </Link>
       );
@@ -1019,7 +1019,7 @@ function PartView({
         job={job}
         variant="inline"
         trailing={
-          <Link href={`/jobs/${job.id}`} className="text-faint transition-colors hover:text-brand" aria-label={workerDetailsLabel(job)}>
+          <Link href={`/jobs/${job.id}`} className="text-faint transition-colors hover:text-brand-text" aria-label={workerDetailsLabel(job)}>
             <ArrowUpRight className="size-3.5" />
           </Link>
         }
@@ -1029,9 +1029,9 @@ function PartView({
   if (part.type === "batch") {
     const children = part.jobIds.map((id) => jobs.find((j) => j.id === id)).filter((j) => j != null);
     return (
-      <div className="rounded-xl border border-border bg-surface/40 p-2.5">
+      <div className="rounded-xl border border-border bg-surface p-2.5">
         <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium">
-          <Sparkles className="size-3.5 text-brand" />
+          <Sparkles className="size-3.5 text-brand-text" />
           {part.jobIds.length} evaluations
           <span className="ml-auto tabular-nums text-faint">
             {workerBatchSummary(children, part.jobIds.length)}
@@ -1044,7 +1044,7 @@ function PartView({
               job={j}
               variant="inline"
               trailing={
-                <Link href={`/jobs/${j.id}`} className="text-faint transition-colors hover:text-brand" aria-label={workerDetailsLabel(j)}>
+                <Link href={`/jobs/${j.id}`} className="text-faint transition-colors hover:text-brand-text" aria-label={workerDetailsLabel(j)}>
                   <ArrowUpRight className="size-3.5" />
                 </Link>
               }
@@ -1095,7 +1095,7 @@ function ConfirmationCard({ part, onConfirm }: {
           <button
             aria-label={`Confirm: ${part.summary}`}
             onClick={(e) => decide(e.currentTarget, true)}
-            className="rounded-full bg-brand px-3 py-1 text-xs font-medium text-brand-foreground transition-colors hover:bg-brand-200"
+            className="rounded-full bg-inverse px-3 py-1 text-xs font-medium text-inverse-foreground transition-colors hover:bg-inverse/80"
           >
             Confirm
           </button>

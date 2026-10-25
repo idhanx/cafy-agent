@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { readJsonObject } from "@/lib/json-body";
 import { digitArg, postCoreScript } from "@/lib/run-core-script";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,7 +9,7 @@ export const dynamic = "force-dynamic";
 // Seed the first follow-up pin through followup-seed.mjs. The argument is the
 // tracker row number. A row that is not Applied fails in the CLI. This route
 // does not pass --force.
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ n?: unknown }>(req);
   if (!body) return NextResponse.json({ error: "bad json" }, { status: 400 });
   const n = digitArg(body.n);
@@ -22,3 +23,5 @@ export async function POST(req: Request) {
     fallback: "could not seed the follow-up",
   });
 }
+
+export const POST = hostedSync(POST_handler);

@@ -4,7 +4,9 @@ import { careerOpsRoot, readApplications } from "@/lib/career-ops";
 import { getNormalizeTextKey } from "@/lib/core/text-key";
 import { evaluatedKeys, isEvaluated } from "@/lib/whats-new-suppression.mjs";
 import type { DiscoveredOffer } from "@/lib/explore";
+import { feedRegions, locationInRegions } from "@/lib/core/location-regions.mjs";
 import { collectWhatsNew, resolveOfferLimit } from "@/lib/whats-new.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,7 +21,7 @@ export const dynamic = "force-dynamic";
 // letter, so "Škoda" collided with "Koda" — suppressing a real offer as
 // "already evaluated" — and "日本電産" keyed to the empty string (#2666).
 
-export async function GET(req: Request) {
+async function GET_handler(req: Request) {
   const searchParams = new URL(req.url).searchParams;
   const days = Math.min(30, Math.max(1, Number(searchParams.get("days")) || 7));
   // Home only needs enough offers for its cards; Explore's “See all” hand-off
@@ -56,11 +58,14 @@ export async function GET(req: Request) {
   const normalizeTextKey = await getNormalizeTextKey();
   const evaluated = evaluatedKeys(readApplications(), normalizeTextKey);
 
+  const regions = feedRegions();
   const toOffer = (c: string[]): DiscoveredOffer | null => {
     const [url, firstSeen, portal, title, company, status, location] = c;
     if (!url || !/^https?:\/\//i.test(url)) return null;
     if (status && /skipped|expired/i.test(status)) return null;
     if (isEvaluated(evaluated, normalizeTextKey, company, title)) return null;
+    // Only roles in the target regions (UK + Ireland by default).
+    if (!locationInRegions(location, regions)) return null;
     return {
       url,
       company: (company || "").trim(),
@@ -75,3 +80,5 @@ export async function GET(req: Request) {
   const { offers, count } = collectWhatsNew(rows, { cutoff, toOffer, offerLimit });
   return Response.json({ offers, count });
 }
+
+export const GET = hostedSync(GET_handler);

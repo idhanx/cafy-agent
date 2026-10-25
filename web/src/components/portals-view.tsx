@@ -55,7 +55,7 @@ export function PortalsView({ watched }: { watched: WatchedCompany[] }) {
         <button
           onClick={check}
           disabled={loading}
-          className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 disabled:opacity-50 max-sm:min-h-[44px]"
+          className="inline-flex items-center gap-2 rounded-full bg-inverse px-4 py-2 text-sm font-medium text-inverse-foreground transition-colors hover:bg-inverse/80 disabled:opacity-50 max-sm:min-h-[44px]"
         >
           {loading ? <Loader2 className="size-4 animate-spin" /> : <Radar className="size-4" />}
           Check portal health
@@ -66,7 +66,7 @@ export function PortalsView({ watched }: { watched: WatchedCompany[] }) {
       {!res && watched.length > 0 && <WatchedList watched={watched} />}
 
       {res && !res.available && !res.error && (
-        <p className="mt-4 rounded-xl border border-dashed border-border bg-surface/30 p-4 text-sm text-muted">
+        <p className="mt-4 rounded-xl border border-dashed border-border bg-surface p-4 text-sm text-muted">
           <code className="text-foreground">verify-portals.mjs</code> not found — this needs a complete career-ops
           checkout (the web orchestrates the core&apos;s validator).
         </p>
@@ -80,7 +80,7 @@ export function PortalsView({ watched }: { watched: WatchedCompany[] }) {
         </p>
       )}
       {res && res.available && !res.configured && (
-        <p className="mt-4 rounded-xl border border-dashed border-border bg-surface/30 p-4 text-sm text-muted">
+        <p className="mt-4 rounded-xl border border-dashed border-border bg-surface p-4 text-sm text-muted">
           No <code className="text-foreground">portals.yml</code> yet — ask the assistant to set up the companies to scan.
         </p>
       )}
@@ -104,7 +104,7 @@ export function PortalsView({ watched }: { watched: WatchedCompany[] }) {
               </span>
             </div>
           )}
-          <ul className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface/40">
+          <ul className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
             {sorted.map((c) => {
               const t = TONE[c.status] ?? TONE.skipped;
               return (
@@ -130,7 +130,7 @@ export function PortalsView({ watched }: { watched: WatchedCompany[] }) {
 function FixAffordance({ company, job, onFix }: { company: string; job?: Job; onFix: () => void }) {
   if (job?.status === "running")
     return (
-      <Link href={`/jobs/${job.id}`} className="inline-flex items-center gap-1 text-xs font-medium text-brand">
+      <Link href={`/jobs/${job.id}`} className="inline-flex items-center gap-1 text-xs font-medium text-brand-text">
         <Loader2 className="size-3 animate-spin" /> Fixing…
       </Link>
     );
@@ -144,7 +144,7 @@ function FixAffordance({ company, job, onFix }: { company: string; job?: Job; on
     <button
       onClick={onFix}
       title={`Have the agent repair ${company}'s portal slug`}
-      className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs text-muted transition-colors hover:border-brand/40 hover:text-brand"
+      className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs text-muted transition-colors hover:border-brand/40 hover:text-brand-text"
     >
       <Wrench className="size-3" /> Fix
     </button>
@@ -160,7 +160,7 @@ function WatchedList({ watched }: { watched: WatchedCompany[] }) {
         <span className="tabular-nums">{watched.length - scanned}</span> paused · run a health check to see which boards
         still answer
       </p>
-      <ul className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface/40">
+      <ul className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface">
         {watched.map((c, i) => (
           <li key={`${i}-${c.name}`} className={cn("flex items-center gap-3 px-4 py-2.5", !c.enabled && "opacity-60")}>
             <CompanyLogo name={c.name} size={20} />

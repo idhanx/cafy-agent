@@ -41,7 +41,7 @@ export function SectionCard({ section, siblings, first, last, ...common }: Commo
   const isHidden = hidden.has(section.id);
   const items = arrange(section.items, edits.order[section.id]);
   return (
-    <section aria-label={section.title} className={cn("rounded-2xl border border-border bg-surface/40 px-4 py-3 transition-opacity", isHidden && "opacity-50")}>
+    <section aria-label={section.title} className={cn("rounded-2xl border border-border bg-surface px-4 py-3 transition-opacity", isHidden && "opacity-50")}>
       <header className="flex items-center gap-1">
         <h2 className="flex-1 font-mono text-xs uppercase tracking-[0.16em] text-faint">{section.title || "Section"}</h2>
         <MoveButtons parent="root" id={section.id} siblings={siblings} first={first} last={last} dispatch={dispatch} label={`${section.title} section`} />
@@ -54,7 +54,7 @@ export function SectionCard({ section, siblings, first, last, ...common }: Commo
               key={t.id}
               aria-pressed={!hidden.has(t.id)}
               onClick={() => dispatch({ type: "toggle", id: t.id })}
-              className={cn("rounded-full border px-2.5 py-0.5 text-xs transition-colors", hidden.has(t.id) ? "border-dashed border-border text-faint line-through" : "border-brand/30 bg-brand-soft text-brand")}
+              className={cn("rounded-full border px-2.5 py-0.5 text-xs transition-colors", hidden.has(t.id) ? "border-dashed border-border text-faint line-through" : "border-brand/30 bg-brand-soft text-brand-text")}
             >
               {t.label}
             </button>
@@ -106,7 +106,7 @@ function ItemBlock({ item, section, siblings, first, last, ...common }: Common &
                   <span className="mr-1.5 text-[10px] font-medium uppercase tracking-wide">Dropped by the tailor</span>
                   {r.text}
                 </span>
-                <button className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs text-muted hover:border-brand/40 hover:text-brand" onClick={() => dispatch({ type: "restore", item: item.id, index: idx })}>
+                <button className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs text-muted hover:border-brand/40 hover:text-brand-text" onClick={() => dispatch({ type: "restore", item: item.id, index: idx })}>
                   <Plus className="size-3" /> Add back
                 </button>
               </li>
@@ -156,7 +156,7 @@ function BulletRow({ n, bullet, parent, siblings, first, last, movable, edits, h
             className="w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm text-foreground focus:border-brand focus:outline-none"
           />
           <div className="mt-1.5 flex gap-2">
-            <button disabled={busy} onClick={saveDraft} className="rounded-full bg-brand px-3 py-0.5 text-xs font-medium text-brand-foreground disabled:opacity-60">
+            <button disabled={busy} onClick={saveDraft} className="rounded-full bg-inverse px-3 py-0.5 text-xs font-medium text-inverse-foreground disabled:opacity-60">
               Use this wording
             </button>
             <button onClick={() => setEditing(false)} className="rounded-full px-3 py-0.5 text-xs text-muted hover:text-foreground">
@@ -182,7 +182,7 @@ function BulletRow({ n, bullet, parent, siblings, first, last, movable, edits, h
         )}
         {shown.source === "tailored" &&
           bullet.drivenBy.map((k) => (
-            <span key={k} className="rounded-full bg-brand-soft px-2 py-0.5 text-[11px] text-brand" title="Job keyword this rewrite added">
+            <span key={k} className="rounded-full bg-brand-soft px-2 py-0.5 text-[11px] text-brand-text" title="Job keyword this rewrite added">
               +{k}
             </span>
           ))}
@@ -196,7 +196,7 @@ function BulletRow({ n, bullet, parent, siblings, first, last, movable, edits, h
                 role="radio"
                 aria-checked={shown.source === kind}
                 onClick={() => dispatch({ type: "use", id: bullet.id, use: { kind } })}
-                className={cn("rounded-full px-2 py-0.5 transition-colors", shown.source === kind ? "bg-brand-soft font-medium text-brand" : "text-muted hover:text-foreground")}
+                className={cn("rounded-full px-2 py-0.5 transition-colors", shown.source === kind ? "bg-brand-soft font-medium text-brand-text" : "text-muted hover:text-foreground")}
               >
                 {kind === "tailored" ? "Tailored" : "Original"}
               </button>
@@ -260,13 +260,13 @@ function RewritePanel({ n, bullet, current, onUse }: { n: string; bullet: Studio
           aria-label="Rewrite instruction"
           className="min-w-0 flex-1 rounded-md border border-border bg-background px-2 py-1 text-sm text-foreground focus:border-brand focus:outline-none"
         />
-        <button type="submit" disabled={proposal.kind === "running" || !instruction.trim()} className="inline-flex items-center gap-1 rounded-full bg-brand px-3 py-1 text-xs font-medium text-brand-foreground disabled:opacity-50">
+        <button type="submit" disabled={proposal.kind === "running" || !instruction.trim()} className="inline-flex items-center gap-1 rounded-full bg-inverse px-3 py-1 text-xs font-medium text-inverse-foreground disabled:opacity-50">
           {proposal.kind === "running" ? <Loader2 className="size-3.5 animate-spin" /> : <Sparkles className="size-3.5" />} Rewrite
         </button>
       </form>
       <div className="mt-1.5 flex flex-wrap gap-1">
         {QUICK.map((q) => (
-          <button key={q} type="button" disabled={proposal.kind === "running"} onClick={() => { setInstruction(q); run(q); }} className="rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted hover:border-brand/40 hover:text-brand disabled:opacity-50">
+          <button key={q} type="button" disabled={proposal.kind === "running"} onClick={() => { setInstruction(q); run(q); }} className="rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted hover:border-brand/40 hover:text-brand-text disabled:opacity-50">
             {q}
           </button>
         ))}
@@ -280,7 +280,7 @@ function RewritePanel({ n, bullet, current, onUse }: { n: string; bullet: Studio
           </p>
           {proposal.warning && <p role="status" className="mt-1.5 text-xs text-amber-800 dark:text-amber-300">{proposal.warning}. It could read or change files while drafting this.</p>}
           <div className="mt-1.5 flex gap-2">
-            <button onClick={() => onUse(proposal.text, proposal.keywords)} className="rounded-full bg-brand px-3 py-0.5 text-xs font-medium text-brand-foreground">Accept</button>
+            <button onClick={() => onUse(proposal.text, proposal.keywords)} className="rounded-full bg-inverse px-3 py-0.5 text-xs font-medium text-inverse-foreground">Accept</button>
             <button onClick={() => setProposal({ kind: "idle" })} className="rounded-full px-3 py-0.5 text-xs text-muted hover:text-foreground">Reject</button>
           </div>
         </div>

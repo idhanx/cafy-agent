@@ -55,6 +55,17 @@ import { isMainModule } from './lib/is-main-module.mjs';
 import { stripEmptyRenderedSections } from './cv-sections-core.mjs';
 import { PAGE_CSS_SIZE, PAGE_FORMATS, normalizePageFormat, pageFormatForCountry, resolvePageFormat } from './lib/page-format.mjs';
 
+// A hosted deployment has no Playwright-managed browser: it points us at a
+// serverless Chromium instead (CAFY_CHROMIUM_EXECUTABLE, plus CAFY_CHROMIUM_ARGS as a
+// JSON array). Unset — every local install — launch options are untouched.
+export function withHostedChromium(options, env = process.env) {
+  const executablePath = (env.CAFY_CHROMIUM_EXECUTABLE || '').trim();
+  if (!executablePath) return options;
+  let args = [];
+  try { args = JSON.parse(env.CAFY_CHROMIUM_ARGS || '[]'); } catch { /* ignore a malformed list */ }
+  return { ...options, executablePath, args: [...(options.args || []), ...(Array.isArray(args) ? args : [])] };
+}
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const trackerPath = resolveTrackerPath(getCareerOpsRoot());
 // Derive the workspace root from the uncanonicalized tracker path (#3169): a
@@ -2091,7 +2102,7 @@ export async function inlineLocalFonts(html) {
  * @returns {Promise<{outputPath: string, pageCount: number, size: number}>}
  */
 export async function renderHtmlToPdf(html, outputPath, opts = {}) {
-  const launchBrowser = opts.launchBrowser || ((options) => chromium.launch(options));
+  const launchBrowser = opts.launchBrowser || ((options) => chromium.launch(withHostedChromium(options)));
   let browser = null;
   try {
     browser = await launchBrowser({ headless: true });
@@ -2307,7 +2318,7 @@ async function renderInPage(browser, html, outputPath, opts = {}) {
  * @returns {Promise<Array<{outputPath: string, ok: boolean, pageCount?: number, size?: number, error?: string}>>}
  */
 export async function renderBatch(entries, opts = {}) {
-  const launchBrowser = opts.launchBrowser || ((options) => chromium.launch(options));
+  const launchBrowser = opts.launchBrowser || ((options) => chromium.launch(withHostedChromium(options)));
   const results = [];
   let browser = null;
   try {

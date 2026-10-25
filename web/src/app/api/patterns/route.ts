@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import fs from "node:fs";
 import { careerOpsRoot, rootScript } from "@/lib/career-ops";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,7 +17,7 @@ export const dynamic = "force-dynamic";
 // small samples — the same reasoning behind stats.mjs's `smallSample` flag — and
 // a UI that hides it would show a user an empty panel where the core had a
 // reason to give.
-export async function GET() {
+async function GET_handler() {
   const script = rootScript("analyze-patterns");
   if (!fs.existsSync(script)) return Response.json({ available: false, patterns: null });
 
@@ -40,3 +41,5 @@ export async function GET() {
     return Response.json({ available: false, patterns: null });
   }
 }
+
+export const GET = hostedSync(GET_handler);

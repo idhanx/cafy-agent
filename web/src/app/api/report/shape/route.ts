@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { careerOpsRoot, doctorState, readApplications, readInbox, trackerCanDelete } from "@/lib/career-ops";
 import { scannerSupportsJson } from "@/lib/core/scan";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,7 +31,7 @@ function dirCount(rel: string, ext: string): number {
   }
 }
 
-export async function GET() {
+async function GET_handler() {
   const doctor = doctorState();
   // "candidate" = a line that LOOKS like a row; parsed = what the tolerant
   // reader accepted. A gap between the two is the data-contract fingerprint.
@@ -60,3 +61,5 @@ export async function GET() {
     },
   });
 }
+
+export const GET = hostedSync(GET_handler);

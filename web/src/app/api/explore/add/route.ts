@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { addOffersToPipeline } from "@/lib/core/pipeline";
 import type { DiscoveredOffer } from "@/lib/explore";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,7 +9,7 @@ export const dynamic = "force-dynamic";
 // Free + reversible: append chosen discovered offers to data/pipeline.md AND
 // record them in data/scan-history.tsv, via the core's CANONICAL exported writers
 // (no parallel writer). No tokens spent.
-export async function POST(req: NextRequest) {
+async function POST_handler(req: NextRequest) {
   let offers: DiscoveredOffer[] = [];
   try {
     const body = (await req.json()) as { offers?: DiscoveredOffer[] };
@@ -21,3 +22,5 @@ export async function POST(req: NextRequest) {
   const result = await addOffersToPipeline(offers);
   return Response.json(result);
 }
+
+export const POST = hostedSync(POST_handler);

@@ -72,7 +72,7 @@ export function LogDialog({
   };
 
   const inputCls =
-    "w-full rounded-md border border-border bg-surface/60 px-3 py-2 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40";
+    "w-full rounded-md border border-border bg-surface px-3 py-2 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40";
 
   return (
     <div
@@ -153,7 +153,7 @@ export function LogDialog({
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 disabled:pointer-events-none disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-full bg-inverse px-3 py-2 text-sm font-medium text-inverse-foreground transition-colors hover:bg-inverse/80 disabled:pointer-events-none disabled:opacity-60"
             >
               {saving && <Loader2 className="size-3.5 animate-spin" />} Log follow-up
             </button>

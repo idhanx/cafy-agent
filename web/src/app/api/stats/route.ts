@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import fs from "node:fs";
 import { careerOpsRoot, rootScript } from "@/lib/career-ops";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ export const dynamic = "force-dynamic";
 // greps this file for quoted --flag literals and requires each to appear in the
 // argv it probes, so quoting it here would register a flag this route must
 // never pass.)
-export async function GET() {
+async function GET_handler() {
   const script = rootScript("stats");
   if (!fs.existsSync(script)) return Response.json({ available: false, stats: null });
 
@@ -41,3 +42,5 @@ export async function GET() {
     return Response.json({ available: false, stats: null });
   }
 }
+
+export const GET = hostedSync(GET_handler);

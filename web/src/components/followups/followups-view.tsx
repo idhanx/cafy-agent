@@ -223,7 +223,7 @@ export function FollowupsView() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search company or role…"
-            className="w-full rounded-md border border-border bg-surface/60 py-2 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40"
+            className="w-full rounded-md border border-border bg-surface py-2 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40"
           />
         </div>
       </div>
@@ -262,7 +262,7 @@ export function FollowupsView() {
       ) : (
         <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full min-w-[880px] text-sm">
-            <thead className="bg-surface/60 text-left text-xs uppercase tracking-wide text-faint">
+            <thead className="bg-surface text-left text-xs uppercase tracking-wide text-faint">
               <tr>
                 <th className="w-8 px-2 py-2.5" aria-label="Expand" />
                 {COLUMNS.map((c) => {
@@ -314,7 +314,7 @@ export function FollowupsView() {
           <ul className="mt-3 divide-y divide-border rounded-2xl border border-border">
             {upcoming.map((entry) => (
               <li key={entry.num} className="flex flex-wrap items-baseline justify-between gap-2 px-4 py-3 text-sm">
-                <Link href={`/pipeline/${entry.num}`} className="font-medium text-foreground hover:text-brand">
+                <Link href={`/pipeline/${entry.num}`} className="font-medium text-foreground hover:text-brand-text">
                   {entry.company}
                   {entry.role ? <span className="font-normal text-muted"> · {entry.role}</span> : null}
                 </Link>
@@ -359,7 +359,7 @@ function NarrativeCard({ meta, entries }: { meta: CadenceMetadata; entries: Cade
   return (
     <div
       className={cn(
-        "mt-5 rounded-xl border border-border border-l-4 bg-surface/40 px-4 py-3 text-sm text-muted",
+        "mt-5 rounded-xl border border-border border-l-4 bg-surface px-4 py-3 text-sm text-muted",
         meta.overdue > 0 ? "border-l-red-500" : "border-l-amber-500",
       )}
     >
@@ -389,7 +389,7 @@ function FollowupRow({
   const Chevron = expanded ? ChevronDown : ChevronRight;
   return (
     <>
-      <tr className="group transition-colors hover:bg-surface/40">
+      <tr className="group transition-colors hover:bg-surface">
         <td className="px-2 py-3">
           <button
             type="button"
@@ -403,7 +403,7 @@ function FollowupRow({
         </td>
         <td className="px-2.5 py-3 font-medium">
           {e.reportPath ? (
-            <Link href={`/pipeline/${e.num}`} className="flex items-center gap-2.5 transition-colors group-hover:text-brand">
+            <Link href={`/pipeline/${e.num}`} className="flex items-center gap-2.5 transition-colors group-hover:text-brand-text">
               <CompanyLogo name={e.company} size={20} />
               {e.company}
             </Link>
@@ -444,7 +444,7 @@ function FollowupRow({
               title={`Pinned to ${e.nextOverride} — cleared when you log a follow-up`}
               aria-label="Pinned manually"
             >
-              <Pin className="size-3 text-brand" />
+              <Pin className="size-3 text-brand-text" />
             </span>
           )}
         </td>
@@ -458,7 +458,7 @@ function FollowupRow({
               type="button"
               onClick={onLog}
               title="Log a follow-up (date, channel, contact, notes)"
-              className="rounded-md px-2 py-1 text-xs font-medium text-muted transition-colors hover:bg-brand-soft hover:text-brand"
+              className="rounded-md px-2 py-1 text-xs font-medium text-muted transition-colors hover:bg-brand-soft hover:text-brand-text"
             >
               Log
             </button>
@@ -468,8 +468,8 @@ function FollowupRow({
               aria-label={e.nextOverride ? `Change next follow-up date for ${e.company}` : `Set next follow-up date for ${e.company}`}
               title={e.nextOverride ? `Next date pinned to ${e.nextOverride} — change or clear` : "Pin a custom next follow-up date"}
               className={cn(
-                "rounded-md p-1 transition-colors hover:bg-brand-soft hover:text-brand",
-                e.nextOverride ? "text-brand" : "text-faint",
+                "rounded-md p-1 transition-colors hover:bg-brand-soft hover:text-brand-text",
+                e.nextOverride ? "text-brand-text" : "text-faint",
               )}
             >
               <CalendarClock className="size-3.5" />
@@ -479,7 +479,7 @@ function FollowupRow({
         </td>
       </tr>
       {expanded && (
-        <tr className="bg-surface/30">
+        <tr className="bg-surface">
           <td colSpan={COLUMNS.length + 2} className="px-4 py-3">
             <HistoryPanel entry={e} onRemove={onRemove} />
           </td>
@@ -530,7 +530,7 @@ function HistoryPanel({ entry: e, onRemove }: { entry: CadenceEntry; onRemove: (
           {e.contacts.map((c, i) => (
             <span key={c.email}>
               {i > 0 && ", "}
-              <a href={`mailto:${c.email}`} className="text-muted underline decoration-dotted underline-offset-2 transition-colors hover:text-brand">
+              <a href={`mailto:${c.email}`} className="text-muted underline decoration-dotted underline-offset-2 transition-colors hover:text-brand-text">
                 {c.name ? `${c.name} <${c.email}>` : c.email}
               </a>
             </span>
@@ -543,7 +543,7 @@ function HistoryPanel({ entry: e, onRemove }: { entry: CadenceEntry; onRemove: (
 
 function EmptyPanel({ title, body }: { title: string; body: string }) {
   return (
-    <div className="mt-4 rounded-2xl border border-dashed border-border bg-surface/30 px-6 py-12 text-center">
+    <div className="mt-4 rounded-2xl border border-dashed border-border bg-surface px-6 py-12 text-center">
       <p className="font-display text-lg">{title}</p>
       <p className="mx-auto mt-1 max-w-md text-sm text-muted">{body}</p>
     </div>

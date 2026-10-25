@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
 import { readMemory, rememberFact } from "@/lib/career-ops";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+async function GET_handler() {
   return NextResponse.json({ memory: readMemory() });
 }
 
 // Append a durable fact the assistant learned about the user. Written to the
 // CANONICAL modes/_profile.md (single source of truth) so the CLI/TUI see it too
 // — never a web-only memory store.
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const b = await readJsonObject<{ fact?: string }>(req);
   if (!b) return NextResponse.json({ error: "bad json" }, { status: 400 });
   const fact = (b.fact ?? "").toString();
@@ -22,3 +23,6 @@ export async function POST(req: Request) {
   if (result === "error") return NextResponse.json({ error: "write failed" }, { status: 500 });
   return NextResponse.json({ ok: true, deduped: result === "deduped" });
 }
+
+export const GET = hostedSync(GET_handler);
+export const POST = hostedSync(POST_handler);

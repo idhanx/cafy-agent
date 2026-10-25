@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import fs from "node:fs";
 import { careerOpsRoot, rootScript, findReportFile } from "@/lib/career-ops";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ export const dynamic = "force-dynamic";
 // Diagnostic only, like the script — it reads a CV and a report and reports
 // coverage. It never edits either, which is the project rule keyword-match.mjs
 // states in its own header: "Keywords get reformulated, never fabricated".
-export async function GET(req: Request) {
+async function GET_handler(req: Request) {
   const id = (new URL(req.url).searchParams.get("report") ?? "").trim();
   if (!id) return Response.json({ available: false, reason: "no-report", result: null });
 
@@ -51,3 +52,5 @@ export async function GET(req: Request) {
     });
   }
 }
+
+export const GET = hostedSync(GET_handler);

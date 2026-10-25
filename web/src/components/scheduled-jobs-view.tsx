@@ -20,7 +20,7 @@ import { EditJobModal } from "./scheduled-scans/edit-job-modal";
 import { JobCard } from "./scheduled-scans/job-card";
 import { RunHistoryDrawer } from "./scheduled-scans/run-history-drawer";
 import type { ScheduledJob, JobRun } from "@/lib/scheduled-jobs";
-import { instrumentSerif } from "@/lib/fonts";
+import { displayFont } from "@/lib/fonts";
 import { updateScheduledJobRequest } from "@/lib/scheduled-job-client.mjs";
 import { isSchedulerStatusPayload } from "@/lib/scheduled-scheduler-status.mjs";
 
@@ -156,8 +156,8 @@ export function ScheduledJobsView() {
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
         <div>
           <div className="flex items-center gap-2.5">
-            <CalendarClock className="size-6 text-brand" />
-            <h1 className={`${instrumentSerif.className} text-3xl text-foreground`}>Scheduled Scans</h1>
+            <CalendarClock className="size-6 text-brand-text" />
+            <h1 className={`${displayFont.className} text-3xl text-foreground`}>Job alerts</h1>
           </div>
           <p className="mt-1.5 max-w-2xl text-sm text-muted">
             Persistent, automated crawler jobs supporting Zero-Token and Full ATS Dataset sweeps.
@@ -168,27 +168,27 @@ export function ScheduledJobsView() {
           <button
             type="button"
             onClick={() => setCreateModalOpen(true)}
-            className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground shadow-lg transition-all hover:bg-brand-200"
+            className="inline-flex items-center gap-2 rounded-full bg-inverse px-4 py-2 text-sm font-medium text-inverse-foreground shadow-lg transition-all hover:bg-inverse/80"
           >
             <CalendarPlus className="size-4" />
-            New Scheduled Scan
+            New job alert
           </button>
           <button
             type="button"
             onClick={() => setHistoryDrawerOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface/60 px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface-hover"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface-hover"
           >
-            <History className="size-4 text-brand" />
+            <History className="size-4 text-brand-text" />
             Run Logs ({store.runs.length})
           </button>
           <button
             type="button"
             onClick={loadData}
             disabled={loading}
-            className="inline-flex size-9 items-center justify-center rounded-full border border-border bg-surface/60 text-muted transition-colors hover:bg-surface-hover hover:text-foreground"
+            className="inline-flex size-9 items-center justify-center rounded-full border border-border bg-surface text-muted transition-colors hover:bg-surface-hover hover:text-foreground"
             title="Refresh list"
           >
-            <RefreshCw className={`size-4 ${loading ? "animate-spin text-brand" : ""}`} />
+            <RefreshCw className={`size-4 ${loading ? "animate-spin text-brand-text" : ""}`} />
           </button>
         </div>
       </div>
@@ -197,66 +197,19 @@ export function ScheduledJobsView() {
       {/* Stats Cards */}
       <div className="grid gap-3.5 sm:grid-cols-4">
         <StatCard label="Active Scans" value={activeJobs.length} subtitle={`${jobsList.length} total jobs`} icon={<Zap className="size-4 text-emerald-500" />} />
-        <StatCard label="Executed Runs" value={totalRuns} subtitle={`${successRuns} successful`} icon={<Layers className="size-4 text-brand" />} />
+        <StatCard label="Executed Runs" value={totalRuns} subtitle={`${successRuns} successful`} icon={<Layers className="size-4 text-brand-text" />} />
         <StatCard label="Roles Discovered" value={totalRolesFound} subtitle="Pushed to pipeline" icon={<Sparkles className="size-4 text-amber-500" />} />
         <StatCard label="Success Rate" value={successRate} subtitle={`${failedRuns} failed runs`} icon={<CheckCircle2 className="size-4 text-emerald-500" />} />
       </div>
 
-      {/* OS Task Scheduler Banner */}
-      {scheduler && (
-        <div className="co-rise rounded-2xl border border-border bg-surface/40 p-4 shadow-sm backdrop-blur-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="grid size-9 place-items-center rounded-xl bg-surface-hover text-brand">
-                <Clock className="size-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                  {osScheduler?.title ?? "Manual scans"}
-                  <span
-                    className={
-                      scheduler.task.exists && scheduler.task.enabled
-                        ? "rounded bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400"
-                        : "rounded bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:text-amber-300"
-                    }
-                  >
-                    {!osScheduler
-                      ? "No automatic schedule"
-                      : scheduler.task.exists
-                        ? scheduler.task.enabled ? "Task enabled" : "Task disabled"
-                        : "Task not installed"}
-                  </span>
-                </div>
-                <div className="mt-0.5 text-xs text-muted">
-                  {!osScheduler
-                    ? "Automatic scheduling is not available on this platform."
-                    : scheduler.task.exists
-                      ? "Next OS check: " + formatTaskTime(scheduler.task.nextRun) + " · Last OS check: " + formatTaskTime(scheduler.task.lastRun)
-                      : `Install with ${osScheduler.install} to run due jobs automatically.`}
-                </div>
-              </div>
-            </div>
-            {osScheduler && <button
-              type="button"
-              onClick={handleTriggerOsScheduler}
-              disabled={osRunning || scheduler.running || !scheduler.available}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-surface-hover disabled:opacity-50"
-            >
-              {osRunning ? <Loader2 className="size-3.5 animate-spin text-brand" /> : <Zap className="size-3.5 text-brand" />}
-              {osRunning ? "Checking..." : "Check due jobs now"}
-            </button>}
-          </div>
-        </div>
-      )}
-
       {/* Filter Tabs & Search */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-1 rounded-full border border-border bg-surface/60 p-1">
+        <div className="flex items-center gap-1 rounded-full border border-border bg-surface p-1">
           <button
             type="button"
             onClick={() => setFilterTab("all")}
             className={`rounded-full px-3.5 py-1 text-xs font-medium transition-colors ${
-              filterTab === "all" ? "bg-brand text-brand-foreground shadow" : "text-muted hover:text-foreground"
+              filterTab === "all" ? "bg-inverse text-inverse-foreground shadow" : "text-muted hover:text-foreground"
             }`}
           >
             All Scans ({jobsList.length})
@@ -265,7 +218,7 @@ export function ScheduledJobsView() {
             type="button"
             onClick={() => setFilterTab("active")}
             className={`rounded-full px-3.5 py-1 text-xs font-medium transition-colors ${
-              filterTab === "active" ? "bg-brand text-brand-foreground shadow" : "text-muted hover:text-foreground"
+              filterTab === "active" ? "bg-inverse text-inverse-foreground shadow" : "text-muted hover:text-foreground"
             }`}
           >
             Active ({activeJobs.length})
@@ -274,7 +227,7 @@ export function ScheduledJobsView() {
             type="button"
             onClick={() => setFilterTab("paused")}
             className={`rounded-full px-3.5 py-1 text-xs font-medium transition-colors ${
-              filterTab === "paused" ? "bg-brand text-brand-foreground shadow" : "text-muted hover:text-foreground"
+              filterTab === "paused" ? "bg-inverse text-inverse-foreground shadow" : "text-muted hover:text-foreground"
             }`}
           >
             Paused ({pausedJobs.length})
@@ -288,7 +241,7 @@ export function ScheduledJobsView() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search scans or keywords…"
-            className="w-full rounded-full border border-border bg-surface/60 pl-8 pr-3 py-1.5 text-xs text-foreground outline-none focus:border-brand/60"
+            className="w-full rounded-full border border-border bg-surface pl-8 pr-3 py-1.5 text-xs text-foreground outline-none focus:border-brand/60"
           />
         </div>
       </div>
@@ -302,9 +255,9 @@ export function ScheduledJobsView() {
           <button
             type="button"
             onClick={() => setCreateModalOpen(true)}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-xs font-medium text-brand-foreground shadow"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-inverse px-4 py-2 text-xs font-medium text-inverse-foreground shadow"
           >
-            <CalendarPlus className="size-3.5" /> New Scheduled Scan
+            <CalendarPlus className="size-3.5" /> New job alert
           </button>
         </div>
       ) : (
@@ -357,13 +310,13 @@ function StatCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="co-rise flex items-center justify-between rounded-xl border border-border bg-surface/40 p-4 shadow-sm transition-all hover:border-brand/30 hover:shadow-md">
+    <div className="co-rise flex items-center justify-between rounded-xl border border-border bg-surface p-4 shadow-sm transition-all hover:border-brand/30 hover:shadow-md">
       <div>
         <span className="text-xs font-medium text-muted">{label}</span>
         <div className="mt-1 text-2xl font-bold tracking-tight text-foreground">{value}</div>
         <div className="mt-0.5 text-[11px] text-faint">{subtitle}</div>
       </div>
-      <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand">
+      <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand-text">
         {icon}
       </div>
     </div>

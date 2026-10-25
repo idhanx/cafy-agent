@@ -129,14 +129,17 @@ function block(reason) {
  * @param {string|null} req.host          Host header
  * @param {Set<string>} req.allowedHosts  extra non-loopback hosts opted in
  * @param {Set<string>} [req.allowedOrigins] extra origins allowed to call the API
+ * @param {boolean} [req.trustHost] hosted deployments: skip the loopback/host allowlist
  * @returns {{ok: true} | {ok: false, status: number, reason: string}}
  */
-export function checkRequest({ secFetchSite, origin, host, allowedHosts, allowedOrigins }) {
+export function checkRequest({ secFetchSite, origin, host, allowedHosts, allowedOrigins, trustHost = false }) {
   // Host filter (see header — NOT the LAN control): loopback, or an opted-in
   // host. A direct client picks its own Host, so this cannot be what closes F2.
   const normalizedHost = normalizeHost(host);
   if (!normalizedHost) return block("missing Host header");
-  const hostAllowed = isLoopbackHost(normalizedHost) || (allowedHosts && allowedHosts.has(normalizedHost));
+  // trustHost: a hosted deployment is reached by whatever domain its platform
+  // routes to it; the password gate (auth.mjs) protects it, not the bind address.
+  const hostAllowed = trustHost || isLoopbackHost(normalizedHost) || (allowedHosts && allowedHosts.has(normalizedHost));
   if (!hostAllowed) {
     return block(
       "this host is not allowed; the dashboard serves loopback only unless CAREER_OPS_WEB_ALLOWED_HOSTS opts it in",

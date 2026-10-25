@@ -62,7 +62,7 @@ export function FunnelRates() {
     return (
       <section className="mt-10">
         <h2 className="font-display text-lg text-landing">Conversion</h2>
-        <p className="mt-3 rounded-2xl border border-dashed border-border bg-surface/30 px-5 py-6 text-sm text-muted">
+        <p className="mt-3 rounded-2xl border border-dashed border-border bg-surface px-5 py-6 text-sm text-muted">
           Nothing to convert yet — these rates come from applications you have
           sent. Apply to a role and the funnel fills in here.
         </p>
@@ -105,7 +105,7 @@ export function FunnelRates() {
 
       <dl className="mt-5 grid grid-cols-3 gap-3">
         {rates.map((r) => (
-          <div key={r.key} className="rounded-xl border border-border bg-surface/40 px-3.5 py-3">
+          <div key={r.key} className="rounded-xl border border-border bg-surface px-3.5 py-3">
             <dt className="text-xs text-muted">{r.label}</dt>
             <dd className="mt-0.5 text-xl tabular-nums text-foreground">
               {/* null, not 0: a rate with nothing to divide by is absent. An

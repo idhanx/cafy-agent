@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import fs from "node:fs";
 import { careerOpsRoot, rootScript } from "@/lib/career-ops";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ export const dynamic = "force-dynamic";
 // escape; the cap is about refusing an absurd argv rather than about quoting.
 const MAX_COMPANY = 120;
 
-export async function GET(req: Request) {
+async function GET_handler(req: Request) {
   const raw = (new URL(req.url).searchParams.get("company") ?? "").trim();
   const company = raw.replace(/[\r\n\0]/g, "").slice(0, MAX_COMPANY);
   if (!company) return Response.json({ available: false, reason: "no-company", card: null });
@@ -43,3 +44,5 @@ export async function GET(req: Request) {
     return Response.json({ available: false, reason: "unparseable", card: null });
   }
 }
+
+export const GET = hostedSync(GET_handler);

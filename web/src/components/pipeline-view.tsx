@@ -171,7 +171,7 @@ export function PipelineView({
     <PageFrame>
       <div className="flex items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl tracking-tight text-landing">Pipeline</h1>
+          <h1 className="font-display text-2xl tracking-tight text-landing">My applications</h1>
           <p className="mt-1 text-sm text-muted">
             <span className="tabular-nums">{inboxCount}</span> in inbox ·{" "}
             <span className="tabular-nums">{visibleApplications.length}</span> tracked
@@ -186,7 +186,7 @@ export function PipelineView({
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search company or role…"
-                className="w-full rounded-md border border-border bg-surface/60 py-2 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40"
+                className="w-full rounded-md border border-border bg-surface py-2 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40"
               />
             </div>
             <button
@@ -194,7 +194,7 @@ export function PipelineView({
               onClick={downloadCsv}
               disabled={isPending || filtered.length === 0}
               title={`Download the ${filtered.length} row${filtered.length === 1 ? "" : "s"} shown as a CSV file`}
-              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border border-border bg-surface/60 px-3 py-2 text-sm text-muted transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand/40 disabled:cursor-not-allowed disabled:opacity-50 max-sm:min-h-[44px] max-sm:min-w-[44px] max-sm:justify-center max-sm:px-0"
+              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border border-border bg-surface px-3 py-2 text-sm text-muted transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand/40 disabled:cursor-not-allowed disabled:opacity-50 max-sm:min-h-[44px] max-sm:min-w-[44px] max-sm:justify-center max-sm:px-0"
             >
               <Download aria-hidden="true" className="size-4" />
               <span className="max-sm:sr-only">Download CSV</span>
@@ -242,7 +242,7 @@ export function PipelineView({
           <button
             type="button"
             onClick={() => setParams({ min: null })}
-            className="inline-flex items-center gap-1.5 rounded-full border border-brand/40 bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand transition-colors hover:bg-brand/15"
+            className="inline-flex items-center gap-1.5 rounded-full border border-brand/40 bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand-text transition-colors hover:bg-brand/15"
             title="Clear score filter"
           >
             score ≥ {minFilter.toFixed(1)}
@@ -252,7 +252,7 @@ export function PipelineView({
       )}
 
       {visibleTab !== "INBOX" && selectedRows.length > 0 && (
-        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface/60 px-3 py-2 text-sm">
+        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2 text-sm">
           <span className="tabular-nums">{selectedRows.length} selected</span>
           <select
             aria-label="Status for selected applications"
@@ -270,14 +270,14 @@ export function PipelineView({
             type="button"
             onClick={applyBulkStatus}
             disabled={!bulkStatus || bulkBusy}
-            className="rounded-md border border-brand/40 bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand disabled:opacity-50"
+            className="rounded-md border border-brand/40 bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand-text disabled:opacity-50"
           >
             {bulkBusy ? "Saving…" : "Apply"}
           </button>
           {selectedRows.length >= 2 && selectedRows.length <= COMPARE_MAX && (
             <Link
               href={`/pipeline/compare?n=${selectedRows.map((r) => r.n).join(",")}`}
-              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-foreground hover:border-brand/40 hover:text-brand"
+              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-foreground hover:border-brand/40 hover:text-brand-text"
             >
               Compare
             </Link>
@@ -316,7 +316,7 @@ export function PipelineView({
            than letting w-full crush them on a phone. */
         <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full min-w-[44rem] text-sm">
-            <thead className="bg-surface/60 text-left text-xs uppercase tracking-wide text-faint">
+            <thead className="bg-surface text-left text-xs uppercase tracking-wide text-faint">
               <tr>
                 <th className="w-8 px-3 py-2.5">
                   <input
@@ -356,7 +356,7 @@ export function PipelineView({
                 const detailHref = `/pipeline/${encodeURIComponent(r.n)}${detailQuery ? `?${detailQuery}` : ""}`;
                 const posting = postingHref(r.url);
                 return (
-                  <tr key={key} data-application-key={key} className="group transition-colors hover:bg-surface/40">
+                  <tr key={key} data-application-key={key} className="group transition-colors hover:bg-surface">
                     <td className="w-8 px-3 py-3">
                       <input
                         type="checkbox"
@@ -366,12 +366,12 @@ export function PipelineView({
                       />
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 font-medium tabular-nums">
-                      <Link href={detailHref} tabIndex={-1} className="transition-colors group-hover:text-brand">
+                      <Link href={detailHref} tabIndex={-1} className="transition-colors group-hover:text-brand-text">
                         #{r.n}
                       </Link>
                     </td>
                     <td className="px-4 py-3 font-medium">
-                      <Link href={detailHref} className="flex items-center gap-2.5 transition-colors group-hover:text-brand">
+                      <Link href={detailHref} className="flex items-center gap-2.5 transition-colors group-hover:text-brand-text">
                         <CompanyLogo name={company.logoName} size={20} />
                         {company.label}
                       </Link>
@@ -385,7 +385,7 @@ export function PipelineView({
                           target="_blank"
                           rel="noreferrer"
                           title={posting}
-                          className="inline-flex shrink-0 items-center gap-1 text-xs text-brand hover:underline"
+                          className="inline-flex shrink-0 items-center gap-1 text-xs text-brand-text hover:underline"
                         >
                           {postingLabel(posting)}
                           <ExternalLink className="size-3" />
@@ -430,7 +430,7 @@ export function PipelineView({
           </table>
         </div>
       ) : (
-        <div className="mt-4 rounded-2xl border border-dashed border-border bg-surface/30 px-6 py-12 text-center">
+        <div className="mt-4 rounded-2xl border border-dashed border-border bg-surface px-6 py-12 text-center">
           <p className="font-display text-lg">No matches</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Try a different tab or clear the search.</p>
         </div>
@@ -443,16 +443,16 @@ export function PipelineView({
 // honest for devs (the CLI/file path stays, demoted to progressive transparency).
 function InboxEmpty({ tracked }: { tracked: number }) {
   return (
-    <div className="dot-bg mt-4 overflow-hidden rounded-2xl border border-border bg-surface/50 bg-origin-border bg-gradient-to-tr from-brand/10 via-transparent to-transparent shadow-lg">
+    <div className="dot-bg mt-4 overflow-hidden rounded-2xl border border-border bg-surface bg-origin-border bg-gradient-to-tr from-brand/10 via-transparent to-transparent shadow-lg">
       <div className="flex items-center gap-2 border-b border-foreground/10 px-5 py-3">
         <span className="size-2.5 rounded-full bg-foreground/15" aria-hidden="true" />
         <span className="size-2.5 rounded-full bg-foreground/15" aria-hidden="true" />
         <span className="size-2.5 rounded-full bg-foreground/15" aria-hidden="true" />
-        <span className="ml-3 font-mono text-xs tracking-wide text-muted">career-ops · inbox</span>
+        <span className="ml-3 font-mono text-xs tracking-wide text-muted">injob · saved jobs</span>
       </div>
       <div className="px-6 py-10 text-center">
         <p className="font-display text-lg">
-          Your <span className="text-brand">inbox</span> is empty.
+          Your <span className="text-brand-text">inbox</span> is empty.
         </p>
         {tracked > 0 && (
           <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
@@ -466,7 +466,7 @@ function InboxEmpty({ tracked }: { tracked: number }) {
         <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Find roles that match your CV — free, no tokens spent.</p>
         <Link
           href="/explore?run=1"
-          className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-brand-foreground shadow-sm transition-all duration-200 hover:bg-brand-200 hover:-translate-y-0.5 hover:shadow-md"
+          className="mt-5 inline-flex items-center gap-2 rounded-full bg-inverse px-5 py-2.5 text-sm font-medium text-inverse-foreground shadow-sm transition-all duration-200 hover:bg-inverse/80 hover:-translate-y-0.5 hover:shadow-md"
         >
           <Compass className="size-4" /> {tracked > 0 ? "Run a free scan" : "Run your first free scan"} <ArrowRight className="size-4" />
         </Link>

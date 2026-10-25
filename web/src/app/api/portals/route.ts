@@ -4,6 +4,7 @@ import { careerOpsRoot, portalsConfigPath } from "@/lib/career-ops";
 import { atomicWriteWithBackup } from "@/lib/core/safe-write";
 import { loadPortalsDocument, mergePortalFilters, PortalsConfigError } from "@/lib/portals-config.mjs";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 // tracked_companies plus every other block. Atomic write, confirm-gated
 // (setProfile/setPortals). This loads the first home scan after role confirmation.
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ roles?: string[]; location?: string[] }>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const roles = (Array.isArray(body.roles) ? body.roles : []).map((r) => String(r).trim()).filter(Boolean).slice(0, 24);
@@ -45,3 +46,5 @@ export async function POST(req: Request) {
   }
   return Response.json({ ok: true, roles: roles.length });
 }
+
+export const POST = hostedSync(POST_handler);

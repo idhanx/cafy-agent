@@ -4,7 +4,7 @@ export default function JobLoading() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-8" aria-label="Loading worker">
       <div className="flex items-center gap-2"><Skeleton className="size-4 rounded-full" /><Skeleton className="h-4 w-20" /></div>
-      <section className="dot-bg relative mt-5 overflow-hidden rounded-2xl border border-border bg-surface/40 px-6 py-7">
+      <section className="dot-bg relative mt-5 overflow-hidden rounded-2xl border border-border bg-surface px-6 py-7">
         <Skeleton className="h-3 w-20" />
         <Skeleton className="mt-3 h-8 w-2/3" />
         <Skeleton className="mt-2 h-4 w-1/2" />
@@ -21,7 +21,7 @@ export default function JobLoading() {
           </div>
         ))}
       </div>
-      <div className="mt-8 rounded-2xl border border-border bg-surface/40 p-5">
+      <div className="mt-8 rounded-2xl border border-border bg-surface p-5">
         <Skeleton className="h-3 w-20" />
         <Skeleton className="mt-4 h-4 w-full" />
         <Skeleton className="mt-3 h-4 w-5/6" />

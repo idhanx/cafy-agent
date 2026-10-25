@@ -10,7 +10,7 @@ export function FollowupsDueSectionSkeleton({ rows = 3 }: { rows?: number }) {
       </div>
       <div className="grid gap-2.5">
         {Array.from({ length: rows }).map((_, i) => (
-          <div key={i} className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-surface/40 px-3.5 py-3">
+          <div key={i} className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border bg-surface px-3.5 py-3">
             <div className="flex min-w-0 flex-[1_1_55%] items-center gap-3">
               <Skeleton className="size-[22px] shrink-0 rounded-full" />
               <div className="min-w-0 flex-1 space-y-2">
@@ -77,7 +77,7 @@ export function PipelinePageSkeleton() {
 
       <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full min-w-[44rem] text-sm">
-          <thead className="bg-surface/60 text-left text-xs uppercase tracking-wide text-faint">
+          <thead className="bg-surface text-left text-xs uppercase tracking-wide text-faint">
             <tr>
               {Array.from({ length: 5 }).map((_, i) => (
                 <th key={i} className="px-4 py-2.5">
@@ -136,7 +136,7 @@ export function FollowupsPageSkeleton() {
 
       <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full min-w-[880px] text-sm">
-          <thead className="bg-surface/60 text-left text-xs uppercase tracking-wide text-faint">
+          <thead className="bg-surface text-left text-xs uppercase tracking-wide text-faint">
             <tr>
               <th className="w-8 px-2 py-2.5"><Skeleton className="h-3 w-3" /></th>
               {Array.from({ length: 10 }).map((_, i) => (
@@ -161,7 +161,7 @@ export function AnalyticsPageSkeleton() {
 
       <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-2xl border border-border bg-surface/50 p-4">
+          <div key={i} className="rounded-2xl border border-border bg-surface p-4">
             <Skeleton className="h-9 w-16" />
             <Skeleton className="mt-2 h-3 w-20" />
           </div>
@@ -195,7 +195,7 @@ export function DocumentsPageSkeleton() {
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex flex-col rounded-2xl border border-border bg-surface/50 p-5">
+          <div key={i} className="flex flex-col rounded-2xl border border-border bg-surface p-5">
             <div className="flex items-center space-x-2">
               <Skeleton className="h-8 w-8 rounded" />
               <Skeleton className="h-5 w-40" />

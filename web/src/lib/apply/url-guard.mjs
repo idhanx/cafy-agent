@@ -47,7 +47,7 @@ function coreGuardHref() {
   let cwd = process.cwd();
   for (let i = 0; i < 5; i++) {
     candidates.push(cwd);
-    const parent = join(cwd, "..");
+    const parent = join(/* turbopackIgnore: true */ cwd, "..");
     if (parent === cwd) break;
     cwd = parent;
   }

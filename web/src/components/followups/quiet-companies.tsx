@@ -42,7 +42,7 @@ export function QuietCompanies() {
   // not-knowing look different.
   if (!checkRan(model)) {
     return (
-      <section className="mt-8 rounded-2xl border border-dashed border-border bg-surface/30 px-5 py-4">
+      <section className="mt-8 rounded-2xl border border-dashed border-border bg-surface px-5 py-4">
         <Header courtesyDays={null} />
         <p className="mt-2 text-sm text-muted">
           This check didn&apos;t run, so nothing here says whether anyone has gone quiet.
@@ -53,7 +53,7 @@ export function QuietCompanies() {
 
   if (model.companies.length === 0) {
     return (
-      <section className="mt-8 rounded-2xl border border-border bg-surface/30 px-5 py-4">
+      <section className="mt-8 rounded-2xl border border-border bg-surface px-5 py-4">
         <Header courtesyDays={model.courtesyDays} />
         <p className="mt-2 text-sm text-muted">
           Nothing has gone quiet past the threshold{model.checked > 0 ? ` across ${model.checked} compan${model.checked === 1 ? "y" : "ies"}` : ""}.
@@ -68,7 +68,7 @@ export function QuietCompanies() {
   }
 
   return (
-    <section className="mt-8 rounded-2xl border border-border bg-surface/40 px-5 py-4">
+    <section className="mt-8 rounded-2xl border border-border bg-surface px-5 py-4">
       <Header courtesyDays={model.courtesyDays} />
 
       <div className="mt-3 grid gap-2.5">
@@ -106,7 +106,7 @@ function Caveats({ warnings, disclaimer }: { warnings: string[]; disclaimer: str
 function Header({ courtesyDays }: { courtesyDays: number | null }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Clock3 className="size-4 text-brand" />
+      <Clock3 className="size-4 text-brand-text" />
       <h2 className="font-display text-base text-landing">No reply since your last round</h2>
       {courtesyDays !== null && <span className="text-xs text-faint">past {courtesyDays} days</span>}
     </div>
@@ -134,7 +134,7 @@ function Row({ c }: { c: QuietCompany }) {
   };
 
   return (
-    <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-border bg-surface/40 px-3.5 py-2.5">
+    <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-border bg-surface px-3.5 py-2.5">
       <div className="min-w-0 flex-[1_1_60%]">
         <p className="truncate text-sm">
           <span className="font-medium text-foreground">{c.company}</span>

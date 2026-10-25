@@ -7,6 +7,7 @@ import { careerOpsRoot } from "@/lib/career-ops";
 import { CAPS } from "@/lib/worker-capabilities.mjs";
 import { scopeFrom } from "@/lib/claude-invocation.mjs";
 import { fencingReport } from "@/lib/cli-fencing.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 // Deny list DERIVED, never hand-written: every one of the six advisor argvs
 // that spelled its own omitted MultiEdit, which --permission-mode acceptEdits
@@ -65,7 +66,7 @@ ${source}`;
 const TEXT_SRC = (t: string) => `SOURCE (the user's CV, pasted as text — convert it):\n"""\n${t.slice(0, 24000)}\n"""`;
 const FILE_SRC = (p: string) => `SOURCE: the user's CV is the file at this local path — READ it with your file/Read tool, then convert it:\n${p}`;
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const ctype = req.headers.get("content-type") || "";
   let cliId = "";
   let promptSource = "";
@@ -269,3 +270,5 @@ function cleanupTemp(file: string) {
     /* best-effort */
   }
 }
+
+export const POST = hostedSync(POST_handler);

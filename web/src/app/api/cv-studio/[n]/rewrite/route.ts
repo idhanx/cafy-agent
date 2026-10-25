@@ -3,6 +3,7 @@ import { readJsonObject } from "@/lib/json-body";
 import { keywordsInText, loadStudio, unsupportedRewriteClaims } from "@/lib/cv-studio/server";
 import { runRewrite } from "@/lib/cv-studio/rewrite-run";
 import { buildRewritePrompt, MAX_INSTRUCTION, parseRewrite } from "@/lib/cv-studio/rewrite.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,7 +20,7 @@ const MESSAGES = {
   unsupported: "The rewrite was discarded because it adds claims this bullet does not support:",
 } as const;
 
-export async function POST(req: Request, { params }: RouteContext) {
+async function POST_handler(req: Request, { params }: RouteContext) {
   const n = (await params).n;
   const body = await readJsonObject<{ bulletId?: unknown; instruction?: unknown; cliId?: unknown }>(req);
   if (!body || typeof body.bulletId !== "string" || typeof body.instruction !== "string" || typeof body.cliId !== "string") {
@@ -44,3 +45,5 @@ export async function POST(req: Request, { params }: RouteContext) {
   if (claims.length) return NextResponse.json({ error: `${MESSAGES.unsupported} ${claims.join(", ")}.`, claims }, { status: 422 });
   return NextResponse.json({ text, keywords: (await keywordsInText(n, text)) ?? [], warning: run.warning });
 }
+
+export const POST = hostedSync(POST_handler);

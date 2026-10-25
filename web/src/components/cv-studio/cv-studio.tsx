@@ -38,12 +38,12 @@ export function CvStudio({ n }: { n: string }) {
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6">
-      <Link href={`/pipeline/${n}`} className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-brand">
+      <Link href={`/pipeline/${n}`} className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-brand-text">
         <ArrowLeft className="size-4" /> Report #{n}
       </Link>
       {load.kind === "loading" && <div className="mt-6 h-[70vh] animate-pulse rounded-2xl bg-muted/15" aria-label="Loading the CV Studio" />}
       {load.kind === "error" && (
-        <div className="mt-8 max-w-xl rounded-2xl border border-border bg-surface/40 px-6 py-5">
+        <div className="mt-8 max-w-xl rounded-2xl border border-border bg-surface px-6 py-5">
           <h1 className="font-display text-xl text-landing">{REASONS[load.reason]?.title ?? "The CV Studio could not open this CV"}</h1>
           <p className="mt-2 text-sm text-muted">{REASONS[load.reason]?.body ?? "Reload the page to try again."}</p>
         </div>
@@ -114,13 +114,13 @@ function Studio({ n, data }: { n: string; data: Loaded }) {
         <div className="flex flex-wrap items-center gap-2">
           <Segmented label="Length" value={edits.preset.length} options={[["full", "Full"], ["one-page", "One page"]]} onChange={(v) => dispatch({ type: "preset", preset: { length: v as "full" | "one-page" } })} />
           <Segmented label="Tone" value={edits.preset.tone} options={[["tailored", "Tailored"], ["conservative", "Conservative"]]} onChange={(v) => dispatch({ type: "preset", preset: { tone: v as "tailored" | "conservative" } })} />
-          <button onClick={() => dispatch({ type: "reset" })} className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted transition-colors hover:border-brand/40 hover:text-brand">
+          <button onClick={() => dispatch({ type: "reset" })} className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs text-muted transition-colors hover:border-brand/40 hover:text-brand-text">
             <RotateCcw className="size-3.5" /> Reset
           </button>
           <button
             onClick={saveForApply}
             disabled={save.kind === "saving"}
-            className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-brand-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 rounded-full bg-inverse px-4 py-1.5 text-sm font-medium text-inverse-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
           >
             {save.kind === "saving" ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />} Save for apply
           </button>
@@ -173,7 +173,7 @@ function Segmented({ label, value, options, onChange }: { label: string; value: 
           role="radio"
           aria-checked={value === v}
           onClick={() => onChange(v)}
-          className={cn("rounded-full px-3 py-1 text-xs transition-colors", value === v ? "bg-brand-soft font-medium text-brand" : "text-muted hover:text-foreground")}
+          className={cn("rounded-full px-3 py-1 text-xs transition-colors", value === v ? "bg-brand-soft font-medium text-brand-text" : "text-muted hover:text-foreground")}
         >
           {text}
         </button>

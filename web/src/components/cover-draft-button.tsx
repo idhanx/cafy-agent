@@ -54,7 +54,7 @@ export function CoverDraftButton({ n, company }: { n: string; company: string })
 
   if (state.kind === "running")
     return (
-      <Link href={`/jobs/${state.jobId}`} className="inline-flex items-center justify-center gap-1.5 rounded-full border border-brand/40 bg-brand-soft px-3 py-1 text-xs font-medium text-brand max-sm:min-h-[44px]">
+      <Link href={`/jobs/${state.jobId}`} className="inline-flex items-center justify-center gap-1.5 rounded-full border border-brand/40 bg-brand-soft px-3 py-1 text-xs font-medium text-brand-text max-sm:min-h-[44px]">
         <Loader2 className="size-3.5 motion-safe:animate-spin" /> Drafting cover letter…
       </Link>
     );
@@ -73,7 +73,7 @@ export function CoverDraftButton({ n, company }: { n: string; company: string })
             onClick={() => setOpen((o) => !o)}
             title="Draft the cover letter again"
             aria-expanded={open}
-            className="inline-flex items-center justify-center rounded-full p-1 text-faint transition-colors hover:text-brand max-sm:min-h-[44px] max-sm:min-w-[44px]"
+            className="inline-flex items-center justify-center rounded-full p-1 text-faint transition-colors hover:text-brand-text max-sm:min-h-[44px] max-sm:min-w-[44px]"
           >
             <RotateCcw className="size-3" />
           </button>
@@ -82,7 +82,7 @@ export function CoverDraftButton({ n, company }: { n: string; company: string })
         <button
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
-          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition-colors hover:border-brand/40 hover:text-brand max-sm:min-h-[44px]"
+          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition-colors hover:border-brand/40 hover:text-brand-text max-sm:min-h-[44px]"
           title="Draft a cover letter for this role with your AI CLI"
         >
           <Mail className="size-3.5" /> Draft cover letter
@@ -100,7 +100,7 @@ export function CoverDraftButton({ n, company }: { n: string; company: string })
         </Link>
       )}
       {open && (
-        <form onSubmit={submit} aria-label="Cover letter questions" className="basis-full rounded-2xl border border-border bg-surface/50 p-4">
+        <form onSubmit={submit} aria-label="Cover letter questions" className="basis-full rounded-2xl border border-border bg-surface p-4">
           {QUESTIONS.map((q) => (
             <label key={q.name} className="mb-3 block text-sm font-medium text-foreground">
               {q.label}
@@ -117,11 +117,11 @@ export function CoverDraftButton({ n, company }: { n: string; company: string })
             </select>
           </label>
           <div className="flex flex-wrap items-center gap-2">
-            <button type="submit" className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3 py-1.5 text-xs font-medium text-brand-foreground shadow-sm transition-colors hover:bg-brand-200 max-sm:min-h-[44px]">
+            <button type="submit" className="inline-flex items-center gap-1.5 rounded-full bg-inverse px-3 py-1.5 text-xs font-medium text-inverse-foreground shadow-sm transition-colors hover:bg-inverse/80 max-sm:min-h-[44px]">
               <Mail className="size-3.5" /> Draft letter
             </button>
             <CostBadge kind="spend" size="xs" />
-            <button type="button" onClick={() => setOpen(false)} className="text-xs text-muted hover:text-brand max-sm:min-h-[44px]">
+            <button type="button" onClick={() => setOpen(false)} className="text-xs text-muted hover:text-brand-text max-sm:min-h-[44px]">
               Cancel
             </button>
           </div>

@@ -64,7 +64,7 @@ export function NextDateDialog({
   };
 
   const inputCls =
-    "w-full rounded-md border border-border bg-surface/60 px-3 py-2 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40";
+    "w-full rounded-md border border-border bg-surface px-3 py-2 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40";
 
   return (
     <div
@@ -110,7 +110,7 @@ export function NextDateDialog({
                 onClick={() => setDate(plusDays(n))}
                 className={cn(
                   "rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-medium transition-colors hover:bg-surface-hover",
-                  date === plusDays(n) && "border-brand/50 bg-brand-soft text-brand",
+                  date === plusDays(n) && "border-brand/50 bg-brand-soft text-brand-text",
                 )}
               >
                 +{n} days
@@ -139,7 +139,7 @@ export function NextDateDialog({
             <button
               type="submit"
               disabled={busy !== null}
-              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 disabled:pointer-events-none disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-full bg-inverse px-3 py-2 text-sm font-medium text-inverse-foreground transition-colors hover:bg-inverse/80 disabled:pointer-events-none disabled:opacity-60"
             >
               {busy === "set" ? <Loader2 className="size-3.5 animate-spin" /> : <Pin className="size-3.5" />} Pin date
             </button>

@@ -47,7 +47,7 @@ export function ResultsList({ offers }: { offers: EnrichedOffer[] }) {
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <div className="flex items-center gap-1.5 rounded-lg border border-border bg-surface/40 px-2.5 py-1.5">
+          <div className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1.5">
             <Search className="size-3.5 text-faint" />
             <input
               value={q}
@@ -56,13 +56,13 @@ export function ResultsList({ offers }: { offers: EnrichedOffer[] }) {
               className="w-32 bg-transparent text-[13px] outline-none placeholder:text-faint"
             />
           </div>
-          <div className="inline-flex rounded-lg border border-border bg-surface/40 p-0.5 text-xs">
+          <div className="inline-flex rounded-lg border border-border bg-surface p-0.5 text-xs">
             {(["fresh", "company"] as const).map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => setSort(s)}
-                className={cn("rounded-md px-2.5 py-1 font-medium capitalize transition-colors", sort === s ? "bg-brand-soft text-brand" : "text-muted hover:text-foreground")}
+                className={cn("rounded-md px-2.5 py-1 font-medium capitalize transition-colors", sort === s ? "bg-brand-soft text-brand-text" : "text-muted hover:text-foreground")}
               >
                 {s}
               </button>
@@ -72,7 +72,7 @@ export function ResultsList({ offers }: { offers: EnrichedOffer[] }) {
             <button
               type="button"
               onClick={() => addToPipeline(addable)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface/40 px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-brand-soft hover:text-brand"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-brand-soft hover:text-brand-text"
             >
               <Plus className="size-3.5" /> Add all {addable.length}
             </button>

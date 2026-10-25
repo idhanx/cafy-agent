@@ -98,10 +98,10 @@ export function WorkerCard({
   const tokens = job.status === "done" ? job.cost?.tokens ?? 0 : 0;
 
   return (
-    <div role="group" aria-label={workerIdentity(job)} className={cn(inline && "rounded-xl border border-border bg-surface/60 p-2.5")}>
+    <div role="group" aria-label={workerIdentity(job)} className={cn(inline && "rounded-xl border border-border bg-surface p-2.5")}>
       <div className="flex items-center gap-2">
         {job.status === "running" ? (
-          <Loader2 className="size-3 shrink-0 animate-spin text-brand" />
+          <Loader2 className="size-3 shrink-0 animate-spin text-brand-text" />
         ) : job.status === "error" ? (
           <AlertTriangle className={cn("size-3 shrink-0", tone.icon)} />
         ) : (

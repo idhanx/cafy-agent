@@ -64,7 +64,7 @@ export function StatusConfirmationCard({ part, onConfirm }: {
           </div>
         )}
         {canDecide && <div className="mt-2 flex gap-2">
-          <button type="button" aria-disabled={saving || undefined} aria-label={`${part.state === "failed" ? "Retry" : "Confirm"}: ${part.summary}`} onClick={(e) => decide(e.currentTarget, true)} className="rounded-full bg-brand px-3 py-1 text-xs font-medium text-brand-foreground aria-disabled:opacity-50">
+          <button type="button" aria-disabled={saving || undefined} aria-label={`${part.state === "failed" ? "Retry" : "Confirm"}: ${part.summary}`} onClick={(e) => decide(e.currentTarget, true)} className="rounded-full bg-inverse px-3 py-1 text-xs font-medium text-inverse-foreground aria-disabled:opacity-50">
             {saving ? "Saving…" : part.state === "failed" ? "Retry" : "Confirm"}
           </button>
           <button type="button" aria-disabled={saving || undefined} aria-label={`Cancel: ${part.summary}`} onClick={(e) => decide(e.currentTarget, false)} className="rounded-full border border-border px-3 py-1 text-xs text-muted aria-disabled:opacity-50">Cancel</button>

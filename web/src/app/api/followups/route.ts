@@ -2,6 +2,7 @@ import { execFile } from "node:child_process";
 import fs from "node:fs";
 import { careerOpsRoot, rootScript } from "@/lib/career-ops";
 import { selectDueFollowups, pickNextUpcoming, selectUpcomingFollowups } from "@/lib/core/followup-view.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,7 +12,7 @@ export const dynamic = "force-dynamic";
 // reimplement the cadence logic, we read its verdict (mirrors /api/doctor).
 // Default: capped list for the home card. `?full=1`: the complete cadence
 // (entries + metadata + cadenceConfig) for the /followups tracker page.
-export async function GET(req: Request) {
+async function GET_handler(req: Request) {
   const full = new URL(req.url).searchParams.get("full") === "1";
   const script = rootScript("followup-cadence");
   if (!fs.existsSync(script)) {
@@ -51,3 +52,5 @@ export async function GET(req: Request) {
     return Response.json({ available: false, metadata: null, entries: [], upcoming: [], nextUpcoming: null });
   }
 }
+
+export const GET = hostedSync(GET_handler);

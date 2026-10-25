@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import fs from "node:fs";
 import { careerOpsRoot, rootScript } from "@/lib/career-ops";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ export const dynamic = "force-dynamic";
 //
 // Never writes. upskill.mjs's own header is explicit that it never adds a claim
 // to cv.md, and this route only reads its verdict.
-export async function GET() {
+async function GET_handler() {
   const script = rootScript("upskill");
   if (!fs.existsSync(script)) return Response.json({ available: false, reason: "no-script", data: null });
 
@@ -33,3 +34,5 @@ export async function GET() {
     return Response.json({ available: false, reason: "unparseable", data: null });
   }
 }
+
+export const GET = hostedSync(GET_handler);

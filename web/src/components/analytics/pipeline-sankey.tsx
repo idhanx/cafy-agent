@@ -48,7 +48,7 @@ export function PipelineSankey({
         on the interview path — a later Rejected does not erase the stage.
       </p>
 
-      <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-surface/50 p-3">
+      <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-surface p-3">
         <svg
           viewBox={`0 0 ${layout.width} ${layout.height}`}
           className="h-auto w-full min-w-[720px]"

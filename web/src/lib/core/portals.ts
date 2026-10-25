@@ -33,11 +33,12 @@ function listFrom(v: unknown): string[] {
 // a "don't silently drop a tier" property that has to be asserted, not eyeballed.
 export { serializePortals } from "./portals-serialize.mjs";
 import { serializePortals } from "./portals-serialize.mjs";
+import { expandRegionAliases } from "./location-regions.mjs";
 
 /** Write the ephemeral filter file to a temp path; caller cleans it up. */
 export function writeTempPortals(f: FilterLists): string {
   const file = path.join(os.tmpdir(), `career-ops-explore-${randomUUID()}.yml`);
-  fs.writeFileSync(file, serializePortals(f), "utf8");
+  fs.writeFileSync(file, serializePortals({ ...f, allow: expandRegionAliases(f.allow), alwaysAllow: expandRegionAliases(f.alwaysAllow) }), "utf8");
   return file;
 }
 

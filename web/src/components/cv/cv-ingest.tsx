@@ -7,7 +7,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Upload, FileText, Loader2, Check, AlertTriangle, Lock, ArrowRight, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { instrumentSerif } from "@/lib/fonts";
+import { displayFont } from "@/lib/fonts";
 import { cvReadiness, parseCvStream, type CvSeed } from "@/lib/cv/quality";
 import { ingestErrorMessage } from "@/lib/cv/ingest-error.mjs";
 import { DEFAULT_FILTERS, filtersToParams } from "@/lib/explore";
@@ -24,7 +24,7 @@ function cliId(): string | null {
 
 const STYLE = `
 .co-cvdrop{position:relative;border:1.5px dashed color-mix(in srgb, var(--fg) 22%, transparent);border-radius:1rem;transition:border-color .2s,background .2s}
-.co-cvdrop[data-over="true"]{border-color:hsl(26 73% 51%);background:hsl(26 73% 51% /.05)}
+.co-cvdrop[data-over="true"]{border-color:hsl(220 73% 51%);background:hsl(220 73% 51% /.05)}
 .co-cvtrace{animation:co-rise .4s ease both}
 `;
 
@@ -210,19 +210,19 @@ export function CvIngest({ onSaved }: { onSaved?: () => void }) {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface/50 px-3 py-1.5 text-xs font-medium text-foreground transition hover:border-brand/40 hover:text-brand max-sm:min-h-[44px] max-sm:px-4"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-foreground transition hover:border-brand/40 hover:text-brand-text max-sm:min-h-[44px] max-sm:px-4"
             >
               <Upload className="size-3.5" /> Upload PDF / file
             </button>
             <input ref={fileRef} type="file" accept=".pdf,.md,.markdown,.txt,.docx" hidden onChange={(e) => e.target.files?.[0] && ingestFile(e.target.files[0])} />
             <span className="inline-flex items-center gap-1 text-[11px] text-faint">
-              <Lock className="size-3" /> Stays on your machine. Parsed by your own AI.
+              <Lock className="size-3" /> Private to you. Parsed by your own AI.
             </span>
             <button
               type="button"
               disabled={!paste.trim()}
               onClick={() => ingestText(paste.trim())}
-              className="ml-auto inline-flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground shadow-sm transition hover:brightness-110 disabled:opacity-50 max-sm:min-h-[44px]"
+              className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-inverse px-4 py-2 text-sm font-semibold text-inverse-foreground shadow-sm transition hover:bg-inverse/80 disabled:opacity-50 max-sm:min-h-[44px]"
             >
               Read my CV <ArrowRight className="size-4" />
             </button>
@@ -249,27 +249,27 @@ export function CvIngest({ onSaved }: { onSaved?: () => void }) {
   // ── PARSING (the 10s bridge) ──
   if (phase === "parsing") {
     return (
-      <div className="rounded-2xl border border-border bg-surface/60 p-6 backdrop-blur-sm">
+      <div className="rounded-2xl border border-border bg-surface p-6 backdrop-blur-sm">
         <style>{STYLE}</style>
         <div className="flex items-center gap-2.5">
-          <Loader2 className="size-4 animate-spin text-brand" />
-          <span className={`${instrumentSerif.className} text-lg text-foreground`}>{trace || "Reading your CV…"}</span>
+          <Loader2 className="size-4 animate-spin text-brand-text" />
+          <span className={`${displayFont.className} text-lg text-foreground`}>{trace || "Reading your CV…"}</span>
         </div>
         <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
           <span className="size-1.5 rounded-full bg-emerald-500" /> 0 tokens · $0.00 · local
         </div>
-        {md && <div className="co-cvtrace mt-4 max-h-40 overflow-hidden rounded-lg border border-border bg-surface/40 p-3 text-[11px] text-faint">{md.slice(0, 400)}…</div>}
+        {md && <div className="co-cvtrace mt-4 max-h-40 overflow-hidden rounded-lg border border-border bg-surface p-3 text-[11px] text-faint">{md.slice(0, 400)}…</div>}
       </div>
     );
   }
 
   // ── REVIEW (propose → confirm) ──
   return (
-    <div className="rounded-2xl border border-border bg-surface/60 p-4 backdrop-blur-sm md:p-5">
+    <div className="rounded-2xl border border-border bg-surface p-4 backdrop-blur-sm md:p-5">
       <style>{STYLE}</style>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <FileText className="size-4 text-brand" />
-        <h3 className={`${instrumentSerif.className} text-lg text-foreground`}>Here&apos;s your CV — review and save</h3>
+        <FileText className="size-4 text-brand-text" />
+        <h3 className={`${displayFont.className} text-lg text-foreground`}>Here&apos;s your CV — review and save</h3>
         {readiness && (
           <span
             className={cn(
@@ -292,9 +292,9 @@ export function CvIngest({ onSaved }: { onSaved?: () => void }) {
         <textarea
           value={md}
           onChange={(e) => setMd(e.target.value)}
-          className="h-72 w-full resize-none rounded-lg border border-border bg-surface/40 p-3 font-mono text-[12px] leading-relaxed outline-none focus:border-brand/40"
+          className="h-72 w-full resize-none rounded-lg border border-border bg-surface p-3 font-mono text-[12px] leading-relaxed outline-none focus:border-brand/40"
         />
-        <div className="prose prose-sm dark:prose-invert h-72 max-w-none overflow-y-auto rounded-lg border border-border bg-surface/40 p-3 text-[13px]">
+        <div className="prose prose-sm dark:prose-invert h-72 max-w-none overflow-y-auto rounded-lg border border-border bg-surface p-3 text-[13px]">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{md}</ReactMarkdown>
         </div>
       </div>
@@ -303,7 +303,7 @@ export function CvIngest({ onSaved }: { onSaved?: () => void }) {
           type="button"
           onClick={save}
           disabled={phase === "saving"}
-          className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-brand-foreground shadow-sm transition hover:brightness-110 disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-xl bg-inverse px-5 py-2.5 text-sm font-semibold text-inverse-foreground shadow-sm transition hover:bg-inverse/80 disabled:opacity-60"
         >
           {phase === "saving" ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
           Save &amp; find my matches

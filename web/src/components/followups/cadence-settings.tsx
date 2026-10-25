@@ -117,7 +117,7 @@ export function CadenceSettings() {
       <label className="mt-8 mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-muted">
         Follow-up cadence
       </label>
-      <div className="rounded-xl border border-border bg-surface/50 p-4">
+      <div className="rounded-xl border border-border bg-surface p-4">
         <p className="text-xs leading-relaxed text-faint">
           When the <span className="text-muted">Follow-ups</span> tracker nudges you. Saved to{" "}
           <span className="font-mono text-muted">config/profile.yml</span> — the CLI uses the same values.
@@ -170,7 +170,7 @@ export function CadenceSettings() {
                         step={1}
                         value={values[f.key]}
                         onChange={(e) => setValues((v) => (v ? { ...v, [f.key]: e.target.value } : v))}
-                        className="mt-1.5 w-24 rounded-md border border-border bg-surface/60 px-3 py-1.5 text-sm tabular-nums outline-none transition-colors focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40"
+                        className="mt-1.5 w-24 rounded-md border border-border bg-surface px-3 py-1.5 text-sm tabular-nums outline-none transition-colors focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40"
                       />
                     </label>
                   ))}

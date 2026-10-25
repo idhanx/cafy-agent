@@ -3,6 +3,7 @@ import { readJsonObject } from "@/lib/json-body";
 import { keywordsInText, loadStudio, renderEditedPdf, saveEdits } from "@/lib/cv-studio/server";
 import { acquireTrackerWrite, releaseTrackerWrite } from "@/lib/core/run-registry";
 import { parseEdits } from "@/lib/cv-studio/studio.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,7 +14,7 @@ const NOT_FOUND = { "no-report": 404, "no-tailored-cv": 404, "unreadable-layout"
 
 const saving = new Set<string>();
 
-export async function GET(_req: Request, { params }: RouteContext) {
+async function GET_handler(_req: Request, { params }: RouteContext) {
   const load = await loadStudio((await params).n);
   if (!load.ok) return NextResponse.json({ error: load.reason }, { status: NOT_FOUND[load.reason] });
   return NextResponse.json(load);
@@ -21,7 +22,7 @@ export async function GET(_req: Request, { params }: RouteContext) {
 
 // Autosave. The edits are re-parsed against the current tailored HTML, so a
 // tab left open across a regeneration cannot write edits for the old CV.
-export async function PUT(req: Request, { params }: RouteContext) {
+async function PUT_handler(req: Request, { params }: RouteContext) {
   const body = await readJsonObject<{ edits?: unknown }>(req);
   if (!body) return NextResponse.json({ error: "bad json" }, { status: 400 });
   const load = await loadStudio((await params).n);
@@ -33,7 +34,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
   return NextResponse.json({ ok: true });
 }
 
-export async function POST(req: Request, { params }: RouteContext) {
+async function POST_handler(req: Request, { params }: RouteContext) {
   const n = (await params).n;
   const body = await readJsonObject<{ op?: string; edits?: unknown; text?: unknown }>(req);
   if (!body) return NextResponse.json({ error: "bad json" }, { status: 400 });
@@ -60,3 +61,7 @@ export async function POST(req: Request, { params }: RouteContext) {
     releaseTrackerWrite(token);
   }
 }
+
+export const GET = hostedSync(GET_handler);
+export const PUT = hostedSync(PUT_handler);
+export const POST = hostedSync(POST_handler);

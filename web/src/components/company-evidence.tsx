@@ -37,7 +37,7 @@ export function CompanyEvidence({ company }: { company: string }) {
 
   if (!model) {
     return (
-      <section className="mt-8 rounded-2xl border border-border bg-surface/40 px-5 py-4">
+      <section className="mt-8 rounded-2xl border border-border bg-surface px-5 py-4">
         <div className="h-5 w-40 animate-pulse rounded bg-muted/25" aria-hidden />
         <div className="mt-3 h-12 w-full animate-pulse rounded bg-muted/25" aria-hidden />
       </section>
@@ -55,9 +55,9 @@ export function CompanyEvidence({ company }: { company: string }) {
     .filter((l): l is string => typeof l === "string");
 
   return (
-    <section className="mt-8 rounded-2xl border border-border bg-surface/40 px-5 py-4">
+    <section className="mt-8 rounded-2xl border border-border bg-surface px-5 py-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Building2 className="size-4 text-brand" />
+        <Building2 className="size-4 text-brand-text" />
         <h2 className="font-display text-base text-landing">What you already know about {model.company ?? company}</h2>
       </div>
 
@@ -96,7 +96,7 @@ function Row({ verdict }: { verdict: Verdict | null }) {
   return (
     <div className="flex items-start gap-2.5">
       <Icon
-        className={`mt-0.5 size-4 shrink-0 ${isConclusion(verdict) ? "text-brand" : "text-faint"}`}
+        className={`mt-0.5 size-4 shrink-0 ${isConclusion(verdict) ? "text-brand-text" : "text-faint"}`}
         aria-hidden
       />
       <div className="min-w-0">

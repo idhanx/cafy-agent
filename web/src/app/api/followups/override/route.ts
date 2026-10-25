@@ -5,6 +5,7 @@ import { isRealISODate } from "@/lib/followups";
 import { parseFollowupId } from "@/lib/followup-id.mjs";
 import { FollowupsBusyError, followupsLogPath, followupsWriteError, withLogLock } from "@/lib/followups-server";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -42,7 +43,7 @@ function rethrowBusy(error: unknown): never {
   throw error;
 }
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ appNum?: string | number; date?: string }>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const appNum = parseFollowupId(body.appNum);
@@ -70,7 +71,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function DELETE(req: Request) {
+async function DELETE_handler(req: Request) {
   const body = await readJsonObject<{ appNum?: string | number }>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const appNum = parseFollowupId(body.appNum);
@@ -98,3 +99,6 @@ export async function DELETE(req: Request) {
     return followupsWriteError(e, "delete failed");
   }
 }
+
+export const POST = hostedSync(POST_handler);
+export const DELETE = hostedSync(DELETE_handler);

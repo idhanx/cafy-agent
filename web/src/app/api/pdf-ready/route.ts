@@ -6,6 +6,7 @@ import { coreScriptHttp } from "@/lib/core-script-result.mjs";
 import { readJsonObject } from "@/lib/json-body";
 import { markTrackerReady } from "@/lib/pdf-render.mjs";
 import { digitArg } from "@/lib/run-core-script";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ const FALLBACK = "could not mark the PDF ready";
 // Flip the tracker PDF cell the way a CV Studio render does, through
 // markTrackerReady. The script lives in the code checkout, which can differ
 // from the data root. The argument is the report number, not the tracker row number.
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ report?: unknown }>(req);
   if (!body) return NextResponse.json({ error: "bad json" }, { status: 400 });
   const report = digitArg(body.report);
@@ -28,3 +29,5 @@ export async function POST(req: Request) {
   const mapped = coreScriptHttp({ code: mark.code, parsed: mark.data, fallback: FALLBACK });
   return NextResponse.json(mapped.body, { status: mapped.status });
 }
+
+export const POST = hostedSync(POST_handler);

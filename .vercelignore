@@ -1,0 +1,43 @@
+# Used when deploying with the Vercel CLI. Git-based deploys only see committed files,
+# which already exclude all of this; this keeps a CLI deploy from uploading the same
+# things. NOTHING in the owner's personal layer (DATA_CONTRACT.md) may ship to a client.
+
+# Personal data
+/cv.md
+/cv.md.bak*
+/config/profile.yml
+/config/cv-facts.json
+/portals.yml
+/article-digest.md
+/voice-dna.md
+/data
+/reports
+/output
+/jds
+/interview-prep
+/documents
+/writing-samples
+/modes/_profile.md
+/modes/_custom.md
+/modes/_brief.md
+/batch/tracker-additions
+/batch/logs
+.env
+.env.*
+!.env.example
+
+# Not needed to build or run
+.git
+node_modules
+web/node_modules
+web/.next
+web/.next-*
+dashboard
+docs
+examples
+test-fixtures
+tests
+web/tests
+web/docs
+.claude
+.playwright-mcp

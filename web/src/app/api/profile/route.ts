@@ -6,6 +6,7 @@ import { careerOpsRoot } from "@/lib/career-ops";
 import { atomicWriteWithBackup } from "@/lib/core/safe-write";
 import { getProfilePath } from "@/lib/core/profile-path.mjs";
 import { isMapping } from "@/lib/portals-config.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -58,7 +59,7 @@ function patchToProfile(p: ProfilePatch): Record<string, unknown> {
   return out;
 }
 
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   let payload: unknown;
   try {
     payload = await req.json();
@@ -109,3 +110,5 @@ export async function POST(req: Request) {
   }
   return Response.json({ ok: true, seeded });
 }
+
+export const POST = hostedSync(POST_handler);

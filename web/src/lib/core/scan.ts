@@ -199,7 +199,7 @@ function runScanner(
   return new Promise((resolve) => {
     const args = [
       rootScript("scan-ats-full"),
-      ...scannerArgs({ ats, json: useJson, sinceDays: filters.sinceDays, limitPerAts: filters.limitPerAts }),
+      ...scannerArgs({ ats, json: useJson, sinceDays: filters.sinceDays, limitPerAts: filters.limitPerAts, locationNarrowed: filters.allow.length + filters.alwaysAllow.length > 0 }),
     ];
 
     const child = spawn(process.execPath, args, {

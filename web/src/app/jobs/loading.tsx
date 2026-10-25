@@ -10,7 +10,7 @@ export default function JobsLoading() {
         </div>
         <Skeleton className="h-9 w-28 rounded-md" />
       </div>
-      <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-surface/40">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-surface">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="flex items-center gap-3 border-b border-border px-4 py-4 last:border-0">
             <Skeleton className="size-4 rounded-full" />

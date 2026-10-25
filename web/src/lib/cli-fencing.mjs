@@ -337,6 +337,10 @@ export const CODEX_REQUIRED_EXEC_FLAGS = Object.freeze([
 const FENCERS = Object.freeze({
   claude: verifyClaudeArgs,
   codex: fenceCodexArgs,
+  // The built-in engine is in-process and receives the capability record
+  // directly (spawn-cli.mjs): its tools are only registered when the record
+  // grants them, so the argv needs no extra flags.
+  openrouter: (args) => args,
 });
 
 /**

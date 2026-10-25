@@ -5,6 +5,7 @@ import { careerOpsRoot } from "@/lib/career-ops";
 import { companyDomain } from "@/lib/company";
 import { companyCacheKey } from "@/lib/core/logo-cache-key.mjs";
 import { companyDomains } from "@/lib/core/company-domains.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -42,7 +43,7 @@ async function fetchFavicon(domain: string): Promise<ArrayBuffer | null> {
   }
 }
 
-export async function GET(req: NextRequest) {
+async function GET_handler(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const domain = (sp.get("domain") ?? "").trim().toLowerCase();
   const company = (sp.get("company") ?? "").trim();
@@ -99,3 +100,5 @@ export async function GET(req: NextRequest) {
   if (!bytes) return new Response("no logo", { status: 404 });
   return new Response(bytes, { status: 200, headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=604800" } });
 }
+
+export const GET = hostedSync(GET_handler);

@@ -13,12 +13,12 @@ const GrainGradient = dynamic(
 
 export function HeroGlow() {
   const [show, setShow] = useState(false);
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const readTheme = () => setDark(document.documentElement.classList.contains("dark"));
+    const readTheme = () => setDark(false);
     readTheme();
     window.addEventListener("themechange", readTheme);
 
@@ -43,7 +43,7 @@ export function HeroGlow() {
   return (
     <GrainGradient
       className="absolute inset-0 z-0 animate-fade-in-delayed"
-      colors={dark ? ["#D5742E", "#9c2f05", "#7A2A0000"] : ["#f6c89a", "#e8a35f", "#D5742E00"]}
+      colors={dark ? ["#3b6df0", "#1e3a8a", "#1e3a8a00"] : ["#eef2fc", "#b4c9f5", "#1955da00"]}
       colorBack="#00000000"
       softness={1}
       intensity={dark ? 0.42 : 0.26}

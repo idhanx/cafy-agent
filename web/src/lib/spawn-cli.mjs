@@ -1,6 +1,9 @@
 import { spawn } from "node:child_process";
 import { fenceArgs } from "./cli-fencing.mjs";
 import { prepareCliLaunch } from "./cli-launch.mjs";
+import { BUILTIN_BIN, runAgent, spawnBuiltinAgent } from "./ai/openrouter-agent.mjs";
+import { resolveAiConfig } from "./ai/provider-config.mjs";
+import { resolveCodeRoot } from "./core/code-root.mjs";
 
 // Plain .mjs (same pattern as tracker-table.mjs/clean-chips.mjs) so
 // tests/lib/spawn-cli.test.mjs can import it directly under Node. Import it with the
@@ -43,6 +46,7 @@ import { prepareCliLaunch } from "./cli-launch.mjs";
  * @param {string[]} args
  * @param {import("node:child_process").SpawnOptionsWithoutStdio} options
  * @param {{cliId: string, capabilities: import("./worker-capabilities.mjs").Capabilities}} fencing
+ * @returns {import("node:child_process").ChildProcessWithoutNullStreams}
  */
 export function spawnHeadlessCli(binPath, args, options, fencing) {
   // Fail fast rather than spawn unfenced. Omitting `fencing` used to spread
@@ -58,6 +62,23 @@ export function spawnHeadlessCli(binPath, args, options, fencing) {
     );
   }
   const { args: fencedArgs } = fenceArgs({ ...fencing, args });
+  // The built-in OpenRouter engine runs in this process (no binary to launch),
+  // under the same capability record the fencing step just applied to the argv.
+  if (binPath === BUILTIN_BIN) {
+    const prompt = fencedArgs[fencedArgs.indexOf("-p") + 1] ?? "";
+    const dataRoot = options?.cwd ?? process.cwd();
+    const env = options?.env ?? process.env;
+    return /** @type {any} */ (spawnBuiltinAgent((signal) =>
+      runAgent({
+        prompt,
+        caps: fencing.capabilities,
+        cfg: resolveAiConfig(dataRoot, env),
+        dataRoot,
+        codeRoot: resolveCodeRoot(process.cwd(), env),
+        signal,
+      }),
+    ));
+  }
   // On Windows an npm-installed CLI is a script shim spawn() cannot run without a
   // shell, so launch the .js/.exe it wraps (a no-op elsewhere; cli-launch.mjs).
   // After fencing, so the fencers see the CLI's own argv rather than node's.

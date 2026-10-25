@@ -7,6 +7,7 @@ import { careerOpsRoot, findReportFile, isRegularContainedFile, pdfPathStatusFor
 import { atomicWrite } from "@/lib/core/safe-write";
 import { matchesTailoredCv, sortNewestFirst } from "@/lib/apply/cv-match.mjs";
 import { markTrackerReady, spawnGeneratePdf } from "@/lib/pdf-render.mjs";
+import { prepareHostedChromium } from "@/lib/hosted-runtime";
 import { htmlText, parseBlocks, renderBlocks, type BlockTree } from "./html-blocks.mjs";
 import { parseBaseCv } from "./base-cv.mjs";
 import { unsupportedClaims } from "./rewrite.mjs";
@@ -82,7 +83,7 @@ export async function loadStudio(n: string): Promise<StudioLoad> {
   const file = await findTailoredHtml(n, id.slug);
   if (!file) return { ok: false, reason: "no-tailored-cv" };
 
-  const html = fs.readFileSync(file, "utf8");
+  const html = fs.readFileSync(/* turbopackIgnore: true */ file, "utf8");
   const tree = parseBlocks(html);
   if (!tree.sections.some((s) => s.items.some((i) => i.bullets.length))) return { ok: false, reason: "unreadable-layout" };
 
@@ -174,6 +175,7 @@ export async function renderEditedPdf(load: Extract<StudioLoad, { ok: true }>, e
   const previousHtml = fs.existsSync(editedHtml) ? fs.readFileSync(editedHtml, "utf8") : null;
   atomicWrite(editedHtml, html);
   const format = /size:\s*a4/i.test(html) ? "a4" : "letter";
+  await prepareHostedChromium();
   const render = await spawnGeneratePdf({ spawnFn: spawn, execPath: process.execPath, root, html: editedHtml, finalPdf: editedPdf, format, reportNum: load.reportNum });
   if (!render.ok) {
     if (previousHtml === null) fs.rmSync(editedHtml, { force: true });

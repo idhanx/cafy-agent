@@ -91,7 +91,7 @@ export function ReportView({
     <PageFrame className="max-w-3xl xl:max-w-5xl 2xl:max-w-[1600px]">
       <Link
         href={backHref}
-        className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-brand"
+        className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-brand-text"
       >
         <ArrowLeft className="size-4" /> Pipeline
       </Link>
@@ -113,7 +113,7 @@ export function ReportView({
           {applyHref && (
             <Link
               href={applyHref}
-              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition-colors hover:border-brand/40 hover:text-brand max-sm:min-h-[44px]"
+              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition-colors hover:border-brand/40 hover:text-brand-text max-sm:min-h-[44px]"
             >
               Apply checklist
             </Link>
@@ -146,7 +146,7 @@ export function ReportView({
                 href={applyUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-1 text-brand hover:underline max-sm:min-h-[44px]"
+                className="inline-flex items-center justify-center gap-1 text-brand-text hover:underline max-sm:min-h-[44px]"
               >
                 posting <ExternalLink className="size-3" />
               </a>
@@ -170,7 +170,7 @@ export function ReportView({
             });
             const verdictClass = recommended
               ? "border-brand/25 bg-brand-soft/50"
-              : "border-border bg-surface/50";
+              : "border-border bg-surface";
             const callout = (
               <div className={`rounded-2xl border px-5 py-5 ${verdictClass}`}>
                 <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-faint">Verdict</p>
@@ -227,7 +227,7 @@ export function ReportView({
                     );
                   }
                   return (
-                    <details key={i} className="group mt-3 overflow-hidden rounded-xl border border-border bg-surface/30">
+                    <details key={i} className="group mt-3 overflow-hidden rounded-xl border border-border bg-surface">
                       <summary className="flex min-h-[44px] cursor-pointer list-none items-center gap-2 px-4 py-3 transition-colors hover:bg-surface-hover">
                         <span className="text-sm font-medium">{cleanHeading(s.heading)}</span>
                         <span className="hidden truncate text-xs text-faint sm:inline">{sectionPreview(s.content)}</span>
@@ -276,7 +276,7 @@ export function ReportView({
           <ScoreMethodology />
         </>
       ) : (
-        <div className="mt-8 flex items-center gap-3 rounded-2xl border border-dashed border-border bg-surface/30 p-5 text-sm text-muted">
+        <div className="mt-8 flex items-center gap-3 rounded-2xl border border-dashed border-border bg-surface p-5 text-sm text-muted">
           <FileText className="size-5 shrink-0 text-faint" />
           No report file found for #{id} in <code className="text-foreground">reports/</code>.
         </div>

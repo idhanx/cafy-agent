@@ -11,6 +11,7 @@
  * spawnFn / execPath / root are injected so tests substitute a fake child
  * process and never touch the real allocator or tracker.
  */
+import fs from "node:fs";
 import path from "node:path";
 import { slugify } from "./pdf-paths.mjs";
 
@@ -178,6 +179,34 @@ function spawnScript({ spawnFn, execPath, root, script, args = [], input = null 
   });
 }
 
+const TRACKER_HEADER = `# Applications Tracker
+
+| # | Date | Company | Role | Score | Status | PDF | Report | Notes | URL |
+|---|------|---------|------|-------|--------|-----|--------|-------|-----|
+`;
+
+/**
+ * A brand-new data folder has no tracker yet, and merge-tracker.mjs answers that with
+ * "No applications.md found. Nothing to merge into." and a clean exit — so a first
+ * evaluation was saved as a report but never reached the tracker. Create the empty
+ * tracker with the URL column, so posting-URL dedup is active from the first row,
+ * tracker (canonical location, honouring CAREER_OPS_TRACKER) when neither location
+ * has one; an existing tracker is never touched.
+ *
+ * @param {string} root data root
+ * @param {NodeJS.ProcessEnv} [env]
+ * @returns {boolean} true when a tracker was created
+ */
+export function ensureTracker(root, env = process.env) {
+  const override = (env.CAREER_OPS_TRACKER || "").trim();
+  const target = override ? path.resolve(root, override) : path.join(root, "data", "applications.md");
+  const legacy = path.join(root, "applications.md");
+  if (fs.existsSync(target) || (!override && fs.existsSync(legacy))) return false;
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, TRACKER_HEADER, { flag: "wx" });
+  return true;
+}
+
 /**
  * Reserve a report number, write the report + TSV, merge the tracker, release
  * the sentinel. Never throws: the caller routes `{ok:false}` through the same
@@ -273,6 +302,11 @@ export async function persistEvaluation({ spawnFn, execPath, root, markdown, url
     return finish(written.stderr || "Could not save the evaluation report: persist-evaluation-report.mjs failed.");
   }
 
+  try {
+    ensureTracker(root);
+  } catch (e) {
+    return finish(`The report was saved but the tracker could not be created: ${e instanceof Error ? e.message : e}.`);
+  }
   const merged = await spawnScript({
     spawnFn, execPath, root, script: "merge-tracker.mjs",
   });

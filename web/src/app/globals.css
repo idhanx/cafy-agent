@@ -1,24 +1,36 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
+/* Cafy is white + blue only: dark: utilities never apply. */
+@custom-variant dark (&:where(.cafy-no-dark, .cafy-no-dark *));
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Design tokens — inherited from career-ops-docs. Brand burnt-orange #dd7627
-   (mode-invariant), zinc neutrals, light + dark (Fumadocs neutral values).
+   Design tokens — Cafy Agent. One royal-blue accent on white,
+   cool-grey canvas, Titillium Web display + Inter UI.
    ────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --color-brand: hsl(26 73% 51%);
-  --color-brand-200: hsl(33 100% 60%); /* hover / lighter */
-  /* Near-black on the brand orange: 5.2:1 on brand, 8.3:1 on brand-200 hover
-     (white was 3.14:1, an AA fail in BOTH themes since the button is the same).
-     The brand orange itself is untouched — only what sits on top of it. */
-  --color-brand-foreground: hsl(24 30% 12%);
-  --color-brand-soft: hsl(26 73% 51% / 0.12);
-  --color-brand-secondary: #fc7744;
+  --color-brand: #1955da; /* accents, highlights, bars, icons */
+  --color-brand-200: #8fb0f0;
+  --color-brand-foreground: #ffffff;
+  --color-brand-soft: rgb(25 85 218 / 0.09);
+  --color-brand-secondary: #e9effc;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
-  --font-display: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --color-emerald-300: #93b4f5;
+  --color-emerald-400: #5f8df0;
+  --color-emerald-500: #1955da;
+  --color-emerald-600: #1648bb;
+  --color-emerald-700: #133c9a;
+  --color-emerald-800: #112f73;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-titillium), "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  --radius-sm: 0.75rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2.5rem;
 }
 
 /* Semantic surfaces reference runtime vars so they swap with the theme class. */
@@ -30,42 +42,34 @@
   --color-foreground: var(--fg);
   --color-muted: var(--muted);
   --color-faint: var(--faint);
-  --color-landing: var(--landing); /* editorial olive (light) / cream (dark) — docs landing-foreground */
-  /* Brand as SMALL TEXT: the raw orange only passes AA in dark (4.95); in light
-     it's 2.6-3.1 on cream/white. brand-text darkens it for light and keeps the
-     raw brand in dark. Use for small text/badges; brand stays for accents,
-     surfaces, icons and large headings (≥24px passes at 3:1). */
-  --color-brand-text: var(--brand-text);
+  --color-landing: var(--landing); /* heading colour */
+  --color-brand-text: var(--brand-text); /* brand blue as small text, AA in both themes */
+  --color-inverse: var(--inverse); /* the black pill: primary action fill */
+  --color-inverse-foreground: var(--inverse-fg);
+  --color-mint: var(--mint); /* pale-mint band */
 }
 
 :root {
-  --bg: #f7f6f3; /* warm off-white (docs stone tone) */
+  --bg: #f8f9fc;
   --surface: #ffffff;
-  --surface-hover: #efeeea;
-  --border: hsl(40 9% 86%);
-  --fg: hsl(30 10% 11%); /* warm near-black, high legibility */
-  --muted: hsl(35 9% 34%); /* darker than before for readable body text */
-  --faint: hsl(35 7% 42%); /* AA: ~4.6:1 on #fff (was 50% ≈ 3.9:1, failed small text) */
-  --landing: #59592a; /* olive editorial headline */
-  --brand-text: hsl(26 80% 36%); /* darkened brand for small text: 5.5 white / 5.1 cream / 4.7 surface-hover */
-  --dot: 40 8% 42% / 0.09;
-  --pre-bg: #f2f1ed;
+  --surface-hover: #f1f4fa;
+  --border: #e4e8f0;
+  --fg: #0f172a;
+  --muted: #5b6470; /* AA on white and mint (muted #86909c fails small text) */
+  --faint: #66707c;
+  --landing: #0f172a;
+  --brand-text: #1955da;
+  --inverse: #1955da;
+  --inverse-fg: #ffffff;
+  --mint: #e9effc;
+  --dot: 150 20% 30% / 0.08;
+  --pre-bg: #f2f4f5;
   color-scheme: light;
 }
 
 .dark {
-  --bg: #0a0a0a;
-  --surface: #161616;
-  --surface-hover: #232323;
-  --border: #262626;
-  --fg: #fafafa;
-  --muted: #a1a1aa;
-  --faint: #8b8b95; /* AA: ~4.6:1 on #161616 (was #71717a ≈ 3.7:1, failed small text) */
-  --landing: #e4e2d0; /* cream editorial headline */
-  --brand-text: hsl(26 73% 51%); /* raw brand already passes in dark (≥4.95 on bg/surface) */
-  --dot: 240 5% 65% / 0.10;
-  --pre-bg: #111111;
-  color-scheme: dark;
+  /* Dark mode is disabled — keep the light Cafy tokens if the class is ever set. */
+  color-scheme: light;
 }
 
 body {
@@ -80,8 +84,9 @@ html {
 
 @layer utilities {
   .font-serif-italic {
-    font-family: var(--font-instrument-serif-italic), var(--font-serif);
-    font-style: italic;
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 600;
   }
   /* Ambient dot grid — adapts to the theme via --dot. Pure CSS, 0 DOM. */
   .dot-bg {
@@ -318,8 +323,14 @@ html {
 .co-cost{display:inline-flex;align-items:center;gap:.28rem;border-radius:999px;font-weight:600;line-height:1;white-space:nowrap;border:1px solid transparent}
 .co-cost[data-size="xs"]{font-size:10.5px;padding:.16rem .4rem;letter-spacing:.04em;text-transform:uppercase}
 .co-cost[data-size="sm"]{font-size:11px;padding:.24rem .5rem}
-.co-cost[data-tone="free"]{color:hsl(162 91% 24%);background:hsl(160 64% 46% / .12);border-color:hsl(160 64% 46% / .28)}
-html.dark .co-cost[data-tone="free"]{color:hsl(158 64% 60%);background:hsl(158 64% 52% / .13);border-color:hsl(158 64% 52% / .26)}
+.co-cost[data-tone="free"]{color:hsl(220 91% 24%);background:hsl(220 64% 46% / .12);border-color:hsl(220 64% 46% / .28)}
+html.dark .co-cost[data-tone="free"]{color:hsl(220 64% 60%);background:hsl(220 64% 52% / .13);border-color:hsl(220 64% 52% / .26)}
 .co-cost[data-tone="spend"]{color:hsl(35 9% 34%);background:hsl(35 8% 46% / .12);border-color:hsl(35 8% 46% / .26)}
 html.dark .co-cost[data-tone="spend"]{color:hsl(35 8% 70%);background:hsl(35 6% 60% / .12);border-color:hsl(35 6% 60% / .24)}
 .co-cost svg{width:.85em;height:.85em}
+
+/* Headings that used the editorial serif now use Inter at a confident weight. */
+@layer base {
+  .font-display { font-weight: 700; letter-spacing: -0.01em; }
+}
+

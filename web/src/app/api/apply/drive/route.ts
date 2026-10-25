@@ -3,6 +3,7 @@ import { driveSession } from "@/lib/apply/drive";
 import { classifyEmpty } from "@/lib/apply/diagnose";
 import { resolveCliOrFallback } from "@/lib/clis";
 import { readJsonObject } from "@/lib/json-body";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,7 +12,7 @@ export const maxDuration = 300;
 // Streamed agentic drive over an OPEN session: the AI drives the headed page to
 // REACH a fillable application form (the user watches each step live), then we
 // extract + finalize. NEVER submits (enforced in driveSession).
-export async function POST(req: Request) {
+async function POST_handler(req: Request) {
   const body = await readJsonObject<{ sessionId?: string; cliId?: string; goal?: "reach" | "full"; answers?: { label: string; value: string }[] }>(req);
   if (!body) return Response.json({ error: "bad json" }, { status: 400 });
   const { sessionId, goal = "reach", answers } = body;
@@ -70,3 +71,5 @@ export async function POST(req: Request) {
   });
   return new Response(stream, { headers: { "Content-Type": "application/x-ndjson", "Cache-Control": "no-store" } });
 }
+
+export const POST = hostedSync(POST_handler);

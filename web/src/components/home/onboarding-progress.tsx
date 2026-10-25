@@ -72,7 +72,7 @@ export function OnboardingProgress({ compact = false }: { compact?: boolean }) {
   const kickoff = `Let's finish setting me up. Still to do: ${asks.join("; ")}. Walk me through it like a recruiter building my brief — one or two things at a time, propose what you infer from my CV, and let me confirm each piece. Don't ask for anything already on file.`;
 
   return (
-    <aside className={`rounded-2xl border border-border bg-surface/40 ${compact ? "p-4" : "p-5"}`} aria-label="Setup progress">
+    <aside className={`rounded-2xl border border-border bg-surface ${compact ? "p-4" : "p-5"}`} aria-label="Setup progress">
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-sm font-medium text-foreground">Your profile, as it takes shape</h2>
         <span className="font-mono text-xs text-muted">{done}/{total}</span>
@@ -94,13 +94,13 @@ export function OnboardingProgress({ compact = false }: { compact?: boolean }) {
       {cli ? (
         <button
           onClick={() => window.dispatchEvent(new CustomEvent("co-assistant", { detail: { message: kickoff } }))}
-          className="mt-4 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200"
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-inverse px-4 py-2 text-sm font-medium text-inverse-foreground transition-colors hover:bg-inverse/80"
         >
           <Sparkles className="size-4" /> Continue with the assistant
         </button>
       ) : (
         <p className="mt-4 text-xs text-muted">
-          Connect your AI CLI in <a href="/config" className="text-foreground underline-offset-2 hover:underline">Config</a> and the assistant fills this in with you.
+          Connect your AI CLI in <a href="/config" className="text-foreground underline-offset-2 hover:underline">Settings</a> and the assistant fills this in with you.
         </p>
       )}
     </aside>
@@ -113,7 +113,7 @@ function Row({ state, label }: { state: "filled" | "template" | "missing"; label
   const hint = state === "template" ? "still the example" : state === "missing" ? "not yet" : "";
   return (
     <li className={`flex items-center gap-2 ${tone}`}>
-      <Icon className={`size-3.5 shrink-0 ${state === "filled" ? "text-brand" : "text-faint"}`} aria-hidden />
+      <Icon className={`size-3.5 shrink-0 ${state === "filled" ? "text-brand-text" : "text-faint"}`} aria-hidden />
       <span className="truncate">{label}</span>
       {hint && <span className="ml-auto shrink-0 text-[11px] text-faint">{hint}</span>}
     </li>

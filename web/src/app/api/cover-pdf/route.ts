@@ -4,6 +4,7 @@ import path from "node:path";
 import { resolveTailoredCover } from "@/lib/apply/cover";
 import { companySlug } from "@/lib/company-slug.mjs";
 import { inlineDisposition } from "@/lib/content-disposition.mjs";
+import { hostedSync } from "@/lib/hosted-route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -22,7 +23,7 @@ export const dynamic = "force-dynamic";
 // this route carried its own copy of all four, which is precisely how the
 // "View cover" link and the check that decides whether to render it start
 // disagreeing about which file exists (CodeRabbit, 2026-09-03).
-export async function GET(req: NextRequest) {
+async function GET_handler(req: NextRequest) {
   const company = (req.nextUrl.searchParams.get("company") ?? "").trim();
   const application = (req.nextUrl.searchParams.get("application") ?? "").trim();
 
@@ -49,3 +50,5 @@ export async function GET(req: NextRequest) {
     return new Response("could not read the PDF", { status: 500 });
   }
 }
+
+export const GET = hostedSync(GET_handler);

@@ -52,7 +52,7 @@ export function SearchInsights() {
     return (
       // The core's own words, plus the distance to the bar. Showing "4 of 5" is
       // the difference between "come back later" and knowing exactly when.
-      <div className="mt-6 rounded-2xl border border-dashed border-border bg-surface/30 px-6 py-8 text-center">
+      <div className="mt-6 rounded-2xl border border-dashed border-border bg-surface px-6 py-8 text-center">
         <p className="font-display text-lg text-landing">Not enough applications yet</p>
         <p className="mx-auto mt-1.5 max-w-md text-sm text-muted">{message}</p>
         {threshold ? (
@@ -86,7 +86,7 @@ export function SearchInsights() {
 
 function Panel({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-border bg-surface/40 px-5 py-4">
+    <section className="rounded-2xl border border-border bg-surface px-5 py-4">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <h3 className="font-display text-base text-landing">{title}</h3>
         {hint && <p className="text-xs text-faint">{hint}</p>}
@@ -98,7 +98,7 @@ function Panel({ title, hint, children }: { title: string; hint?: string; childr
 
 function Empty({ title, body }: { title: string; body: string }) {
   return (
-    <div className="mt-6 rounded-2xl border border-dashed border-border bg-surface/30 px-6 py-10 text-center">
+    <div className="mt-6 rounded-2xl border border-dashed border-border bg-surface px-6 py-10 text-center">
       <p className="font-display text-lg text-landing">{title}</p>
       <p className="mx-auto mt-1.5 max-w-md text-sm text-muted">{body}</p>
     </div>

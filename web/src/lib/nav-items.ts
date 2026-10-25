@@ -11,20 +11,23 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Today", icon: LayoutDashboard },
-  { href: "/explore", label: "Explore", icon: Compass, chip: "New" },
-  { href: "/scheduled-scans", label: "Scheduled scans", icon: CalendarClock },
-  { href: "/pipeline", label: "Pipeline", icon: ListChecks },
+  { href: "/", label: "Home", icon: LayoutDashboard },
+  { href: "/explore", label: "Find jobs", icon: Compass, chip: "New" },
+  { href: "/scheduled-scans", label: "Job alerts", icon: CalendarClock },
+  { href: "/pipeline", label: "My applications", icon: ListChecks },
   { href: "/followups", label: "Follow-ups", icon: Send },
-  { href: "/portals", label: "Portals", icon: Radar },
-  { href: "/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/cv", label: "CV", icon: FileText },
-  { href: "/documents", label: "Documents", icon: Files },
-  { href: "/config", label: "Config", icon: Settings },
+  { href: "/portals", label: "Companies", icon: Radar },
+  { href: "/analytics", label: "Insights", icon: BarChart3 },
+  { href: "/cv", label: "Résumé", icon: FileText },
+  { href: "/documents", label: "Files", icon: Files },
+  { href: "/config", label: "Settings", icon: Settings },
 ];
 
-export function visibleNavItems(followupsEnabled: boolean): NavItem[] {
-  return followupsEnabled ? NAV_ITEMS : NAV_ITEMS.filter((item) => item.href !== "/followups");
+// Needs a computer that stays on and an OS scheduler, so a hosted deployment omits it.
+const LOCAL_ONLY = new Set(["/scheduled-scans"]);
+
+export function visibleNavItems(followupsEnabled: boolean, hosted = false): NavItem[] {
+  return NAV_ITEMS.filter((item) => (followupsEnabled || item.href !== "/followups") && !(hosted && LOCAL_ONLY.has(item.href)));
 }
 
 export function isActivePath(href: string, pathname: string): boolean {
